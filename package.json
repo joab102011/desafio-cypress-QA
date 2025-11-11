@@ -1,0 +1,27 @@
+{
+  "name": "desafio-cypress-qa",
+  "version": "1.0.0",
+  "description": "Projeto de automação de testes com Cypress para o site lojaebac.ebaconline.art.br",
+  "main": "index.js",
+  "scripts": {
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "cy:run:chrome": "cypress run --browser chrome",
+    "cy:run:firefox": "cypress run --browser firefox",
+    "cy:run:edge": "cypress run --browser edge",
+    "test": "cypress run"
+  },
+  "keywords": [
+    "cypress",
+    "automation",
+    "testing",
+    "qa",
+    "e2e"
+  ],
+  "author": "Joabe",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^13.6.0"
+  }
+}
+
