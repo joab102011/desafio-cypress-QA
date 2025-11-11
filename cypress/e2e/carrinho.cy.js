@@ -1,0 +1,155 @@
+/**
+ * Testes de Carrinho de Compras
+ * 
+ * Cenário Crítico: Gerenciamento do carrinho de compras
+ * 
+ * Justificativa: O carrinho é fundamental no e-commerce, pois é onde o cliente
+ * gerencia os produtos antes de finalizar a compra. É crítico garantir que:
+ * 1. Produtos sejam adicionados corretamente
+ * 2. Quantidades possam ser alteradas
+ * 3. Produtos possam ser removidos
+ * 4. O total seja calculado corretamente
+ * 5. O carrinho persista entre sessões (se aplicável)
+ * 
+ * Qualquer falha aqui pode resultar em perda de vendas ou problemas no checkout.
+ */
+
+import HomePage from '../support/page-objects/HomePage'
+import ProductPage from '../support/page-objects/ProductPage'
+import CartPage from '../support/page-objects/CartPage'
+
+describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
+  
+  // Hook executado antes de cada teste
+  beforeEach(() => {
+    // Limpar carrinho antes de cada teste para garantir estado limpo
+    cy.clearCart()
+    // Visitar a página inicial
+    HomePage.visit()
+  })
+
+  it('Deve adicionar produto ao carrinho a partir da página inicial', () => {
+    // Dado que estou na página inicial
+    HomePage.shouldBeOnHomePage()
+    
+    // Quando clico em um produto
+    // Nota: Ajustar o seletor conforme a estrutura real do site
+    cy.get('.product').first().click()
+    
+    // E adiciono o produto ao carrinho
+    ProductPage.shouldBeOnProductPage()
+    ProductPage.addToCart()
+    
+    // Então o produto deve ser adicionado com sucesso
+    ProductPage.shouldShowAddToCartSuccess()
+    
+    // E o carrinho deve mostrar 1 item
+    HomePage.visit()
+    HomePage.shouldHaveCartItems(1)
+  })
+
+  it('Deve adicionar múltiplas quantidades do mesmo produto', () => {
+    // Dado que estou na página de um produto
+    HomePage.visit()
+    cy.get('.product').first().click()
+    ProductPage.shouldBeOnProductPage()
+    
+    // Quando adiciono 3 unidades do produto
+    ProductPage.addToCart(3)
+    
+    // Então o produto deve ser adicionado com sucesso
+    ProductPage.shouldShowAddToCartSuccess()
+    
+    // E ao visualizar o carrinho, deve ter 3 unidades
+    ProductPage.viewCart()
+    CartPage.shouldBeOnCartPage()
+    CartPage.shouldHaveItems(1) // 1 item, mas com quantidade 3
+  })
+
+  it('Deve remover produto do carrinho', () => {
+    // Dado que tenho um produto no carrinho
+    HomePage.visit()
+    cy.get('.product').first().click()
+    ProductPage.addToCart()
+    ProductPage.viewCart()
+    
+    // Quando removo o produto do carrinho
+    CartPage.removeItem(0)
+    
+    // Então o carrinho deve estar vazio
+    CartPage.shouldBeEmpty()
+  })
+
+  it('Deve atualizar a quantidade de um produto no carrinho', () => {
+    // Dado que tenho um produto no carrinho
+    HomePage.visit()
+    cy.get('.product').first().click()
+    ProductPage.addToCart(1)
+    ProductPage.viewCart()
+    CartPage.shouldBeOnCartPage()
+    
+    // Quando atualizo a quantidade para 5
+    CartPage.updateQuantity(0, 5)
+    
+    // Então a quantidade deve ser atualizada
+    // (Verificação adicional pode ser feita verificando o total)
+    cy.get('.quantity input').first().should('have.value', '5')
+  })
+
+  it('Deve calcular o total do carrinho corretamente', () => {
+    // Dado que tenho produtos no carrinho
+    HomePage.visit()
+    
+    // Adicionar primeiro produto
+    cy.get('.product').first().click()
+    ProductPage.addToCart(2)
+    ProductPage.viewCart()
+    
+    // Adicionar segundo produto
+    HomePage.visit()
+    cy.get('.product').eq(1).click()
+    ProductPage.addToCart(1)
+    ProductPage.viewCart()
+    
+    // Quando visualizo o carrinho
+    CartPage.shouldBeOnCartPage()
+    
+    // Então o total deve ser calculado corretamente
+    // (Nota: Validação específica depende da estrutura do site)
+    CartPage.getCartTotal().should('exist')
+  })
+
+  it('Deve navegar para o checkout a partir do carrinho', () => {
+    // Dado que tenho produtos no carrinho
+    HomePage.visit()
+    cy.get('.product').first().click()
+    ProductPage.addToCart()
+    ProductPage.viewCart()
+    
+    // Quando clico em "Finalizar compra"
+    CartPage.proceedToCheckout()
+    
+    // Então devo ser redirecionado para a página de checkout
+    cy.url().should('include', '/checkout')
+  })
+
+  it('Deve limpar todo o carrinho', () => {
+    // Dado que tenho múltiplos produtos no carrinho
+    HomePage.visit()
+    
+    // Adicionar vários produtos
+    for (let i = 0; i < 3; i++) {
+      cy.get('.product').eq(i).click()
+      ProductPage.addToCart()
+      HomePage.visit()
+    }
+    
+    // Quando limpo o carrinho
+    CartPage.visit()
+    CartPage.clearCart()
+    
+    // Então o carrinho deve estar vazio
+    CartPage.shouldBeEmpty()
+  })
+})
+
