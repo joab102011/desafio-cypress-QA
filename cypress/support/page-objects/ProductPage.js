@@ -178,7 +178,7 @@ class ProductPage {
                     }
                   })
                 
-                cy.get('body', { timeout: 2000 }).should('be.visible')
+                cy.get('body', { timeout: 5000 }).should('be.visible')
                 
                 cy.get('ul[role="radiogroup"][aria-label="Color"], ul[role="radiogroup"][data-attribute_name*="color"]')
                   .find('li.variable-item.button-variable-item')
@@ -193,7 +193,7 @@ class ProductPage {
                     }
                   })
                 
-                cy.get('body', { timeout: 2000 }).should('be.visible')
+                cy.get('body', { timeout: 5000 }).should('be.visible')
               })
             }
           })
@@ -237,7 +237,8 @@ class ProductPage {
         cy.wrap($el[0]).click({ force: true })
       })
     
-    cy.get('body', { timeout: 2000 }).should('be.visible')
+    // Aguardar resposta do servidor após adicionar ao carrinho
+    cy.get('body', { timeout: 5000 }).should('be.visible')
   }
 
   shouldShowAddToCartSuccess() {
