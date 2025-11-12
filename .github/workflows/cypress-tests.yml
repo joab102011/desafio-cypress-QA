@@ -1,18 +1,18 @@
 name: Cypress Tests - CI/CD
 
 # Este workflow executa os testes automatizados do Cypress
-# sempre que houver push na branch main
+# APENAS quando executado manualmente via GitHub Actions
 # 
-# Justificativa da configuração:
-# - Execução automática em push garante qualidade contínua (recomendação do entrevistador)
+# Estratégia de CI/CD:
+# - Execução manual permite controle sobre quando rodar testes (economia de recursos)
+# - Testes locais são executados antes do push (npm run test:local)
+# - Workflow manual disponível para validações específicas e prioridades do sistema
 # - Navegador padrão do Cypress (Electron) é suficiente para validação
 # - Upload de artifacts facilita debug de falhas
 # - Retry automático reduz flaky tests (testa e retesta várias vezes)
 
 on:
-  push:
-    branches: [ main ]
-  workflow_dispatch: # Permite execução manual
+  workflow_dispatch: # Execução manual apenas - permite controle sobre quando rodar testes
 
 jobs:
   # Job para executar testes Cypress

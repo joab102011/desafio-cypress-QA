@@ -348,32 +348,66 @@ Os testes executados via GitHub Actions geram automaticamente:
 
 ## 🔄 CI/CD - GitHub Actions ⭐ DIFERENCIAL
 
-O projeto inclui pipeline automatizado de CI/CD configurado para executar automaticamente a cada push.
+O projeto inclui pipeline automatizado de CI/CD configurado para **execução manual sob demanda**.
 
 ### Workflow de Testes
 
 **Arquivo:** `.github/workflows/cypress-tests.yml`
 
-**Justificativa da Configuração:**
+### Estratégia de CI/CD: Execução Manual
 
-Este workflow foi configurado seguindo as recomendações do entrevistador de garantir **qualidade contínua** e **testar e retestar várias vezes**. A configuração atual atende aos seguintes requisitos:
+**Por que execução manual e não automática a cada push?**
 
-1. **Execução Automática em Push**
-   - ✅ Roda automaticamente a cada push na branch `main`
-   - ✅ Garante que todo código commitado seja testado
-   - ✅ Alinha com a recomendação de "testa e retesta várias vezes"
-   - ✅ Evita que código com problemas seja integrado
+A decisão de usar execução manual ao invés de automática a cada push foi tomada considerando os seguintes fatores:
+
+#### 1. **Economia de Recursos e Custos** 💰
+   - ✅ **Evita consumo desnecessário de minutos do GitHub Actions**
+   - ✅ **Reduz custos em projetos com muitos commits/pushes**
+   - ✅ **Permite controle sobre quando utilizar recursos do CI/CD**
+   - ✅ **Ideal para projetos onde nem todo commit precisa de validação completa**
+
+#### 2. **Testes Locais como Primeira Linha de Defesa** 🛡️
+   - ✅ **Testes locais são executados ANTES do push** (`npm run test:local`)
+   - ✅ **Desenvolvedor valida código localmente antes de enviar**
+   - ✅ **Falhas são detectadas e corrigidas localmente**
+   - ✅ **Reduz necessidade de executar testes no CI para cada push**
+
+#### 3. **Execução sob Demanda para Prioridades Específicas** 🎯
+   - ✅ **Workflow disponível para execução manual quando necessário**
+   - ✅ **Ideal para validações específicas e prioridades do sistema**
+   - ✅ **Permite executar testes em momentos estratégicos**
+   - ✅ **Útil para validações antes de releases ou merges importantes**
+
+#### 4. **Flexibilidade e Controle** 🎛️
+   - ✅ **Time decide quando executar testes no CI**
+   - ✅ **Evita execuções desnecessárias durante desenvolvimento ativo**
+   - ✅ **Permite focar testes em momentos críticos**
+   - ✅ **Reduz "ruído" de execuções automáticas constantes**
+
+#### 5. **Melhor Gestão de Workflow** 📊
+   - ✅ **Histórico de execuções mais limpo e focado**
+   - ✅ **Fácil identificar execuções importantes**
+   - ✅ **Reduz notificações desnecessárias**
+   - ✅ **Melhor organização das execuções de CI/CD**
+
+### Configuração do Workflow
+
+O workflow está configurado com:
+
+1. **Execução Manual Apenas**
+   - ✅ Disparado apenas via `workflow_dispatch` (interface do GitHub)
+   - ✅ Não executa automaticamente em push
+   - ✅ Controle total sobre quando executar
 
 2. **Testes no Navegador Padrão**
    - ✅ Utiliza o navegador padrão do Cypress (Electron)
    - ✅ Execução mais rápida e eficiente
    - ✅ Suficiente para validação de funcionalidades
-   - ✅ Reduz tempo de execução do pipeline
 
 3. **Validação de Qualidade de Código**
    - ✅ ESLint executado antes dos testes
    - ✅ Garante que código segue padrões estabelecidos
-   - ✅ Mantém consistência do código (recomendação do entrevistador)
+   - ✅ Mantém consistência do código
 
 4. **Retry Automático**
    - ✅ Configurado no `cypress.config.js` (2 retries em modo headless)
@@ -384,18 +418,27 @@ Este workflow foi configurado seguindo as recomendações do entrevistador de ga
    - ✅ Vídeos dos testes sempre disponíveis
    - ✅ Screenshots em caso de falha
    - ✅ Facilita identificação e correção de problemas
-   - ✅ Permite análise detalhada de falhas
 
-6. **Otimização de Performance**
-   - ✅ Cache de dependências npm
-   - ✅ Execução paralela de jobs
-   - ✅ Reduz tempo de execução do pipeline
+### Como Executar o Workflow Manualmente
 
-### Execução
+1. Acesse a aba **"Actions"** no repositório GitHub
+2. Selecione o workflow **"Cypress Tests - CI/CD"**
+3. Clique em **"Run workflow"**
+4. Selecione a branch (geralmente `main`)
+5. Clique em **"Run workflow"** novamente
 
-O workflow é executado automaticamente quando:
-- ✅ Push para `main`
-- ✅ Execução manual via GitHub Actions UI (workflow_dispatch)
+O workflow executará todos os testes e você poderá acompanhar o progresso em tempo real.
+
+### Quando Usar o Workflow Manual
+
+Recomenda-se executar o workflow manualmente em situações como:
+
+- 🎯 **Antes de releases importantes**
+- 🎯 **Antes de merges críticos**
+- 🎯 **Validações periódicas do sistema**
+- 🎯 **Após mudanças significativas no código**
+- 🎯 **Validações de regressão**
+- 🎯 **Testes de integração completos**
 
 ### Status dos Testes
 
