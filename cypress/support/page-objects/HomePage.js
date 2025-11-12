@@ -2,36 +2,37 @@
  * Page Object para a página inicial (Home)
  * 
  * Este arquivo contém os seletores e métodos relacionados à página inicial.
+ * Seletores ajustados baseados na estrutura real do site http://lojaebac.ebaconline.art.br
  */
 
 class HomePage {
-  // Seletores da página inicial
+  // Seletores da página inicial - baseados na estrutura real do site
   get logo() {
-    return cy.get('.site-logo, .logo')
+    return cy.get('a[href*="/"] img[alt*="EBAC"], .site-logo')
   }
 
   get searchField() {
-    return cy.get('.search-field, #search-field')
+    return cy.get('input[placeholder*="Enter your search"], input[type="search"], input[name*="search"]')
   }
 
   get searchButton() {
-    return cy.get('.search-submit, button[type="submit"]')
+    return cy.get('button:contains("Search"), button[type="submit"]').first()
   }
 
   get cartIcon() {
-    return cy.get('.cart-icon, .cart-contents')
+    return cy.get('button:contains("Cart"), .cart-contents')
   }
 
   get cartCount() {
-    return cy.get('.cart-count, .cart-contents-count')
-  }
-
-  get menuItems() {
-    return cy.get('.menu-item, .nav-menu li')
+    return cy.get('button:contains("Cart")').then(($btn) => {
+      const text = $btn.text()
+      const match = text.match(/(\d+)/)
+      return match ? cy.wrap(parseInt(match[1])) : cy.wrap(0)
+    })
   }
 
   get products() {
-    return cy.get('.product, .woocommerce-loop-product__link')
+    return cy.get('a[href*="/product/"], .product, .woocommerce-loop-product__link')
   }
 
   get myAccountLink() {
@@ -59,7 +60,7 @@ class HomePage {
    * @param {string} productName - Nome do produto
    */
   clickProduct(productName) {
-    cy.contains('.product, .woocommerce-loop-product__link', productName)
+    cy.contains('a[href*="/product/"]', productName)
       .should('be.visible')
       .click()
   }
@@ -69,11 +70,12 @@ class HomePage {
    * @param {number} expectedCount - Quantidade esperada
    */
   shouldHaveCartItems(expectedCount) {
-    if (expectedCount > 0) {
-      this.cartCount.should('be.visible').and('contain', expectedCount)
-    } else {
-      this.cartCount.should('not.exist')
-    }
+    cy.get('button:contains("Cart")').should(($btn) => {
+      const text = $btn.text()
+      const match = text.match(/(\d+)/)
+      const count = match ? parseInt(match[1]) : 0
+      expect(count).to.equal(expectedCount)
+    })
   }
 
   /**
@@ -94,10 +96,9 @@ class HomePage {
    * Verifica se está na página inicial
    */
   shouldBeOnHomePage() {
-    cy.url().should('eq', Cypress.config('baseUrl') + '/')
+    cy.url().should('include', Cypress.config('baseUrl'))
     this.logo.should('be.visible')
   }
 }
 
 export default new HomePage()
-

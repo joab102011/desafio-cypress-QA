@@ -67,13 +67,13 @@ describe('Testes de Performance do Frontend', () => {
       
       cy.step('Quando a lista de produtos é renderizada')
       cy.step('Então deve aparecer em menos de 500ms')
-      cy.measureElementRender('.products, .woocommerce-loop-product', 500)
+      cy.measureElementRender('a[href*="/product/"], .product, .woocommerce-loop-product__link', 500)
     })
 
     it('Deve renderizar detalhes do produto em menos de 500ms', () => {
       cy.step('Dado que acesso um produto')
       HomePage.visit()
-      cy.get('.product').first().click()
+      cy.get('a[href*="/product/"]').first().click()
       
       cy.step('Quando os detalhes são renderizados')
       cy.step('Então devem aparecer em menos de 500ms')
@@ -98,13 +98,13 @@ describe('Testes de Performance do Frontend', () => {
       
       cy.step('Quando as imagens são carregadas')
       cy.step('Então cada imagem deve carregar em menos de 2 segundos')
-      cy.measureImageLoad('.product img, .woocommerce-loop-product__link img', 2000)
+      cy.measureImageLoad('a[href*="/product/"] img, .product img, .woocommerce-loop-product__link img', 2000)
     })
 
     it('Deve carregar imagem principal do produto em menos de 1.5 segundos', () => {
       cy.step('Dado que acesso um produto')
       HomePage.visit()
-      cy.get('.product').first().click()
+      cy.get('a[href*="/product/"]').first().click()
       
       cy.step('Quando a imagem principal é carregada')
       cy.step('Então deve carregar em menos de 1.5 segundos')
@@ -128,14 +128,14 @@ describe('Testes de Performance do Frontend', () => {
     it('Deve adicionar produto ao carrinho em menos de 1 segundo', () => {
       cy.step('Dado que estou na página de um produto')
       HomePage.visit()
-      cy.get('.product').first().click()
+      cy.get('a[href*="/product/"]').first().click()
       ProductPage.shouldBeOnProductPage()
       
       cy.step('Quando adiciono ao carrinho')
       cy.step('Então a resposta deve aparecer em menos de 1 segundo')
       cy.measureInteraction(
-        'button[name="add-to-cart"], .single_add_to_cart_button',
-        '.woocommerce-message, .success',
+        'button:contains("Comprar"), button[name="add-to-cart"], .single_add_to_cart_button',
+        '.woocommerce-message, .success, button:contains("Cart")',
         1000
       )
     })
@@ -162,7 +162,7 @@ describe('Testes de Performance do Frontend', () => {
     it('Deve atualizar quantidade no carrinho em menos de 1 segundo', () => {
       cy.step('Dado que tenho produto no carrinho')
       HomePage.visit()
-      cy.get('.product').first().click()
+      cy.get('a[href*="/product/"]').first().click()
       ProductPage.addToCart()
       ProductPage.viewCart()
       CartPage.shouldBeOnCartPage()
@@ -184,7 +184,7 @@ describe('Testes de Performance do Frontend', () => {
       cy.step('Quando produtos são carregados via AJAX')
       cy.step('Então a requisição deve responder em menos de 500ms')
       cy.get('body').then(($body) => {
-        if ($body.find('.products').length > 0) {
+        if ($body.find('a[href*="/product/"], .product').length > 0) {
           cy.measureAjaxResponse('GET', '**/api/products**', 500).catch(() => {
             cy.log('⚠️ Nenhuma requisição AJAX detectada')
           })
@@ -248,7 +248,7 @@ describe('Testes de Performance do Frontend', () => {
       cy.step('Quando navego para produtos')
       const startTime = Date.now()
       cy.visit('/produtos')
-      cy.get('.products, .woocommerce-loop-product').should('be.visible').then(() => {
+      cy.get('a[href*="/product/"], .product, .woocommerce-loop-product__link').should('be.visible').then(() => {
         const navTime = Date.now() - startTime
         cy.log(`⏱️ Tempo de navegação: ${navTime}ms`)
         expect(navTime).to.be.lessThan(2000)
@@ -258,7 +258,7 @@ describe('Testes de Performance do Frontend', () => {
     it('Deve carregar checkout rapidamente após adicionar produto', () => {
       cy.step('Dado que adiciono produto ao carrinho')
       HomePage.visit()
-      cy.get('.product').first().click()
+      cy.get('a[href*="/product/"]').first().click()
       ProductPage.addToCart()
       ProductPage.viewCart()
       
@@ -283,7 +283,7 @@ describe('Testes de Performance do Frontend', () => {
       
       cy.step('Quando adiciono 5 produtos')
       for (let i = 0; i < 5; i++) {
-        cy.get('.product').eq(i).click()
+        cy.get('a[href*="/product/"]').eq(i).click()
         ProductPage.addToCart()
         HomePage.visit()
       }

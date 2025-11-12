@@ -30,7 +30,7 @@ describe('Testes de Checkout - Cenário Crítico', () => {
     HomePage.visit()
     
     // Adicionar um produto ao carrinho
-    cy.get('.product').first().click()
+    cy.get('a[href*="/product/"]').first().click()
     ProductPage.addToCart()
     ProductPage.viewCart()
     
@@ -118,7 +118,7 @@ describe('Testes de Checkout - Cenário Crítico', () => {
     
     cy.step('E tenho produtos no carrinho')
     HomePage.visit()
-    cy.get('.product').first().click()
+    cy.get('a[href*="/product/"]').first().click()
     ProductPage.addToCart()
     ProductPage.viewCart()
     CartPage.proceedToCheckout()

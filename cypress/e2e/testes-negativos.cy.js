@@ -120,7 +120,7 @@ describe('Testes Negativos - Validações e Edge Cases', () => {
     it('Não deve permitir adicionar quantidade negativa ao carrinho', () => {
       cy.step('Dado que estou na página de um produto')
       HomePage.visit()
-      cy.get('.product').first().click()
+      cy.get('a[href*="/product/"]').first().click()
       ProductPage.shouldBeOnProductPage()
       
       cy.step('Quando tento adicionar quantidade negativa')
@@ -138,7 +138,7 @@ describe('Testes Negativos - Validações e Edge Cases', () => {
     it('Não deve permitir adicionar quantidade zero ao carrinho', () => {
       cy.step('Dado que estou na página de um produto')
       HomePage.visit()
-      cy.get('.product').first().click()
+      cy.get('a[href*="/product/"]').first().click()
       ProductPage.shouldBeOnProductPage()
       
       cy.step('Quando tento adicionar quantidade zero')
@@ -156,7 +156,7 @@ describe('Testes Negativos - Validações e Edge Cases', () => {
     it('Não deve permitir adicionar quantidade acima do estoque disponível', () => {
       cy.step('Dado que estou na página de um produto')
       HomePage.visit()
-      cy.get('.product').first().click()
+      cy.get('a[href*="/product/"]').first().click()
       ProductPage.shouldBeOnProductPage()
       
       cy.step('Quando tento adicionar quantidade muito alta')
@@ -187,7 +187,7 @@ describe('Testes Negativos - Validações e Edge Cases', () => {
     beforeEach(() => {
       // Adicionar produto ao carrinho para os testes de checkout
       HomePage.visit()
-      cy.get('.product').first().click()
+      cy.get('a[href*="/product/"]').first().click()
       ProductPage.addToCart()
       ProductPage.viewCart()
       CartPage.proceedToCheckout()

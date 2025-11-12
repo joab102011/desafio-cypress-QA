@@ -30,7 +30,7 @@ describe('Fluxo Completo E2E - Jornada do Cliente', () => {
     HomePage.searchProduct('produto')
     
     cy.step('E clico em um produto nos resultados')
-    cy.get('.product, .woocommerce-loop-product__link').first().click()
+    cy.get('a[href*="/product/"]').first().click()
     
     cy.step('E visualizo os detalhes do produto')
     ProductPage.shouldBeOnProductPage()
@@ -93,7 +93,7 @@ describe('Fluxo Completo E2E - Jornada do Cliente', () => {
     HomePage.visit()
     
     cy.step('E adiciono produtos ao carrinho')
-    cy.get('.product').first().click()
+    cy.get('a[href*="/product/"]').first().click()
     ProductPage.addToCart()
     ProductPage.viewCart()
     

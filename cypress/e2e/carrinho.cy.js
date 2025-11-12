@@ -33,7 +33,7 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
     HomePage.shouldBeOnHomePage()
     
     cy.step('Quando clico em um produto')
-    cy.get('.product').first().click()
+    cy.get('a[href*="/product/"]').first().click()
     
     cy.step('E adiciono o produto ao carrinho')
     ProductPage.shouldBeOnProductPage()
@@ -50,7 +50,7 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
   it('Deve adicionar múltiplas quantidades do mesmo produto', () => {
     cy.step('Dado que estou na página de um produto')
     HomePage.visit()
-    cy.get('.product').first().click()
+    cy.get('a[href*="/product/"]').first().click()
     ProductPage.shouldBeOnProductPage()
     
     cy.step('Quando adiciono 3 unidades do produto')
@@ -68,7 +68,7 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
   it('Deve remover produto do carrinho', () => {
     cy.step('Dado que tenho um produto no carrinho')
     HomePage.visit()
-    cy.get('.product').first().click()
+    cy.get('a[href*="/product/"]').first().click()
     ProductPage.addToCart()
     ProductPage.viewCart()
     
@@ -82,7 +82,7 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
   it('Deve atualizar a quantidade de um produto no carrinho', () => {
     cy.step('Dado que tenho um produto no carrinho')
     HomePage.visit()
-    cy.get('.product').first().click()
+    cy.get('a[href*="/product/"]').first().click()
     ProductPage.addToCart(1)
     ProductPage.viewCart()
     CartPage.shouldBeOnCartPage()
@@ -99,13 +99,13 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
     HomePage.visit()
     
     cy.step('Quando adiciono primeiro produto')
-    cy.get('.product').first().click()
+    cy.get('a[href*="/product/"]').first().click()
     ProductPage.addToCart(2)
     ProductPage.viewCart()
     
     cy.step('E adiciono segundo produto')
     HomePage.visit()
-    cy.get('.product').eq(1).click()
+    cy.get('a[href*="/product/"]').eq(1).click()
     ProductPage.addToCart(1)
     ProductPage.viewCart()
     
@@ -117,7 +117,7 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
   it('Deve navegar para o checkout a partir do carrinho', () => {
     cy.step('Dado que tenho produtos no carrinho')
     HomePage.visit()
-    cy.get('.product').first().click()
+    cy.get('a[href*="/product/"]').first().click()
     ProductPage.addToCart()
     ProductPage.viewCart()
     
@@ -134,7 +134,7 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
     
     cy.step('Quando adiciono vários produtos')
     for (let i = 0; i < 3; i++) {
-      cy.get('.product').eq(i).click()
+      cy.get('a[href*="/product/"]').eq(i).click()
       ProductPage.addToCart()
       HomePage.visit()
     }

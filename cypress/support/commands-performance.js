@@ -175,7 +175,7 @@ Cypress.Commands.add('measureImageLoad', (selector, maxImageLoadTime = 2000) => 
  * @param {number} maxResponseTime - Tempo máximo esperado em ms
  * 
  * Exemplo de uso:
- * cy.measureAjaxResponse('GET', '**/api/products', 500)
+ * cy.measureAjaxResponse('GET', '/api/products', 500)
  */
 Cypress.Commands.add('measureAjaxResponse', (method, urlPattern, maxResponseTime = 500) => {
   const startTime = Date.now()
