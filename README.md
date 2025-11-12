@@ -372,8 +372,21 @@ O projeto utiliza Page Objects para organizar os seletores e métodos de cada p�
 
 ### Retry
 
-- `runMode`: 0 retries em modo headless (desabilitado - site tem performance estável)
-- `openMode`: 0 retries no modo interativo
+O projeto utiliza retry automático para reduzir flaky tests em testes de frontend:
+
+- **`runMode: 2`** - 2 tentativas em modo headless (CI/CD)
+  - Ajuda a lidar com instabilidades de rede, performance e timing
+  - Reduz falsos negativos causados por condições transitórias
+  - Teste será executado até 3 vezes (1 inicial + 2 retries) antes de falhar
+  
+- **`openMode: 1`** - 1 tentativa no modo interativo (desenvolvimento)
+  - Menos retries para não atrasar o desenvolvimento
+  - Teste será executado até 2 vezes (1 inicial + 1 retry) antes de falhar
+
+**Por que usar retry?**
+- Testes de frontend podem falhar devido a condições transitórias (rede lenta, elementos carregando, timing)
+- Retry automático diferencia falhas reais de instabilidades temporárias
+- Melhora a confiabilidade dos testes sem mascarar problemas reais
 
 ### Vídeos e Screenshots
 
@@ -384,9 +397,13 @@ O projeto utiliza Page Objects para organizar os seletores e métodos de cada p�
 
 O projeto inclui tratamento para erros comuns:
 
-- Erros de JavaScript de terceiros (ex: ResizeObserver)
-- Validações robustas com timeouts adequados
-- Site com performance estável, sem necessidade de retry
+- **Erros de JavaScript de terceiros** (ex: ResizeObserver) - tratados no `e2e.js`
+- **Validações robustas** com timeouts adequados
+- **Retry automático** configurado para reduzir flaky tests:
+  - 2 retries em modo headless (CI/CD)
+  - 1 retry no modo interativo (desenvolvimento)
+- **Seletores múltiplos** para maior robustez
+- **Estratégias defensivas** para lidar com variações de timing
 
 ## 📊 Resultados dos Testes
 
@@ -475,10 +492,11 @@ O workflow está configurado com:
    - Garante que código segue padrões estabelecidos
    - Mantém consistência do código
 
-4. **Retry Desabilitado**
-   - Retry desabilitado no `cypress.config.js` (0 retries)
-   - Site tem performance estável, não há necessidade de retry
-   - Testes executam uma única vez, mais rápido e direto
+4. **Retry Automático Configurado**
+   - Retry configurado no `cypress.config.js` para reduzir flaky tests
+   - 2 retries em modo headless (CI/CD) - ajuda a lidar com instabilidades transitórias
+   - 1 retry no modo interativo (desenvolvimento) - balanceia confiabilidade e velocidade
+   - Melhora a confiabilidade dos testes sem mascarar problemas reais
 
 5. **Artifacts para Debug**
    - Vídeos dos testes sempre disponíveis

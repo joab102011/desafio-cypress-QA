@@ -8,8 +8,11 @@ module.exports = defineConfig({
   requestTimeout: 10000,
   pageLoadTimeout: 30000,
   retries: {
-    runMode: 0,
-    openMode: 0
+    // Retry padrão para reduzir flaky tests em testes de frontend
+    // runMode: 2 retries em CI/CD (headless) - ajuda a lidar com instabilidades de rede/performance
+    // openMode: 1 retry no modo interativo - menos retries para não atrasar desenvolvimento
+    runMode: 2,
+    openMode: 1
   },
   video: true,
   screenshotOnRunFailure: true,
