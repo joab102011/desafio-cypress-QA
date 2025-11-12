@@ -6,6 +6,7 @@
 // Importar comandos customizados
 // Os comandos customizados são importados automaticamente quando este arquivo é carregado
 import './commands'
+import './commands-performance'
 
 // Configurações globais de Cypress
 // Desabilitar logs desnecessários no console
