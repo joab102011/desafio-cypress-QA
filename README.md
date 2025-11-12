@@ -126,7 +126,11 @@ npm run format
 
 ## 🎯 Cenários Automatizados e Justificativas
 
-### 1. **Login** (Cenário Crítico)
+**Total de Testes Implementados: 67 testes** ✅
+
+Todos os cenários foram implementados e testados com sucesso. Abaixo estão os detalhes de cada cenário:
+
+### 1. **Login** (Cenário Crítico) - 6 testes
 
 **Justificativa:** O login é o ponto de entrada para todas as funcionalidades que requerem autenticação. Qualquer falha aqui impede o acesso a funcionalidades essenciais do e-commerce como checkout, histórico de pedidos, etc.
 
@@ -138,7 +142,9 @@ npm run format
 - Recuperação de senha
 - Logout
 
-### 2. **Carrinho de Compras** (Cenário Crítico)
+**Arquivo:** `cypress/e2e/login.cy.js`
+
+### 2. **Carrinho de Compras** (Cenário Crítico) - 7 testes
 
 **Justificativa:** O carrinho é fundamental no e-commerce, pois é onde o cliente gerencia os produtos antes de finalizar a compra. Qualquer falha pode resultar em perda de vendas ou problemas no checkout.
 
@@ -151,7 +157,9 @@ npm run format
 - Navegar para checkout
 - Limpar carrinho
 
-### 3. **Checkout** (Cenário MAIS Crítico)
+**Arquivo:** `cypress/e2e/carrinho.cy.js`
+
+### 3. **Checkout** (Cenário MAIS Crítico) - 6 testes
 
 **Justificativa:** O checkout é o momento mais crítico do e-commerce, pois é onde a venda é concretizada. Qualquer falha aqui resulta diretamente em perda de receita.
 
@@ -163,7 +171,9 @@ npm run format
 - Exibição de resumo do pedido
 - Alteração de quantidade no checkout
 
-### 4. **Busca de Produtos**
+**Arquivo:** `cypress/e2e/checkout.cy.js`
+
+### 4. **Busca de Produtos** - 4 testes
 
 **Justificativa:** A busca é essencial para que os clientes encontrem produtos rapidamente. Problemas na busca podem resultar em abandono de carrinho.
 
@@ -173,7 +183,9 @@ npm run format
 - Busca por nome parcial
 - Navegação para produto a partir dos resultados
 
-### 5. **Fluxo Completo E2E**
+**Arquivo:** `cypress/e2e/busca.cy.js`
+
+### 5. **Fluxo Completo E2E** - 2 testes
 
 **Justificativa:** Valida a jornada completa do cliente desde a busca até a finalização da compra, garantindo que o fluxo principal de vendas funciona end-to-end.
 
@@ -181,36 +193,77 @@ npm run format
 - Fluxo completo: Busca → Produto → Carrinho → Checkout
 - Fluxo completo com usuário logado
 
-### 6. **Testes Negativos**
+**Arquivo:** `cypress/e2e/fluxo-completo.cy.js`
+
+### 6. **Testes Negativos** - 22 testes
 
 **Justificativa:** Testes negativos são essenciais para garantir robustez e segurança. Previnem quebra do sistema com dados inválidos, problemas de segurança e má experiência do usuário.
 
 **Cenários cobertos:**
-- Validações de campos obrigatórios
-- Validações de formato (email, telefone, CEP)
-- Proteção contra SQL Injection
-- Proteção contra XSS (Cross-Site Scripting)
-- Validação de limites (quantidade, tamanho de campos)
-- Tratamento de tentativas múltiplas de login
-- Validações de carrinho vazio
-- Validações de checkout sem dados
-- Tratamento de URLs inválidas
-- Validação de caracteres especiais
+- Validações de login (6 testes)
+  - Campo email vazio
+  - Campo senha vazio
+  - Email em formato inválido
+  - SQL injection no campo email
+  - XSS no campo email
+  - Múltiplas tentativas falhas
+- Validações de carrinho (4 testes)
+  - Quantidade negativa
+  - Quantidade zero
+  - Quantidade acima do estoque
+  - Remover item de carrinho vazio
+- Validações de checkout (7 testes)
+  - Email inválido
+  - Telefone inválido
+  - CEP inválido
+  - Sem método de pagamento
+  - Caracteres especiais em campos numéricos
+  - Campos obrigatórios vazios
+  - Dados muito longos
+- Validações de busca (3 testes)
+  - Busca vazia
+  - Caracteres especiais
+  - SQL injection
+- Validações de navegação (2 testes)
+  - URL inválida
+  - Acesso direto ao checkout sem produtos
 
-### 7. **Testes de Performance**
+**Arquivo:** `cypress/e2e/testes-negativos.cy.js`
+
+### 7. **Testes de Performance** - 20 testes
 
 **Justificativa:** Performance impacta diretamente experiência do usuário, taxa de conversão, SEO e satisfação do cliente. Estes testes garantem que o site mantenha performance adequada.
 
 **Cenários cobertos:**
-- Performance de carregamento de páginas
-- Performance de renderização de elementos
-- Performance de carregamento de imagens
-- Performance de interações do usuário
-- Performance de requisições AJAX
-- Validação de recursos bloqueantes
-- Performance de navegação
-- Performance sob carga
-- Métricas de navegador (DOM, Load Time, Server Response)
+- Performance de carregamento de páginas (4 testes)
+  - Página inicial
+  - Página de produtos
+  - Página de login
+  - Validação de métricas
+- Performance de renderização de elementos (3 testes)
+  - Lista de produtos
+  - Detalhes do produto
+  - Carrinho
+- Performance de carregamento de imagens (2 testes)
+  - Imagens dos produtos
+  - Imagem principal do produto
+- Performance de interações do usuário (4 testes)
+  - Resposta à busca
+  - Adicionar produto ao carrinho
+  - Processar login
+  - Atualizar quantidade no carrinho
+- Performance de requisições AJAX (1 teste)
+- Performance de recursos (3 testes)
+  - Recursos bloqueantes
+  - CSS crítico
+  - JavaScript não bloqueante
+- Performance de navegação (2 testes)
+  - Navegação entre páginas
+  - Carregamento de checkout
+- Performance sob carga (1 teste)
+  - Múltiplos produtos
+
+**Arquivo:** `cypress/e2e/performance.cy.js`
 
 ## 📁 Estrutura do Projeto
 
@@ -254,9 +307,17 @@ desafio-cypress-QA/
 └── README.md                   # Este arquivo
 ```
 
+## 📈 Estatísticas do Projeto
+
+- **Total de Testes**: 67 testes automatizados
+- **Taxa de Sucesso**: 100% (67/67 testes passando)
+- **Cobertura**: 7 cenários críticos de e-commerce
+- **Tempo Médio de Execução**: ~15 minutos (todos os testes)
+- **Arquivos de Teste**: 7 specs organizadas por funcionalidade
+
 ## 🛠️ Tecnologias Utilizadas
 
-- **Cypress** 13.6.0 - Framework de automação de testes
+- **Cypress** 13.17.0 - Framework de automação de testes
 - **JavaScript** - Linguagem de programação
 - **Page Object Pattern** - Padrão de design para organização do código
 - **BDD** - Behavior Driven Development para escrita dos testes
@@ -327,7 +388,35 @@ O projeto inclui tratamento para erros comuns:
 - Validações robustas com timeouts adequados
 - Site com performance estável, sem necessidade de retry
 
-## 📊 Relatórios
+## 📊 Resultados dos Testes
+
+### Execução Completa dos Testes
+
+Todos os testes foram executados com sucesso! Abaixo estão os resultados da execução completa:
+
+![Resultados dos Testes](./docs/test-results.png)
+
+### Resumo da Execução
+
+| Arquivo de Teste | Tempo | Testes | Passando | Falhando |
+|-----------------|-------|--------|----------|----------|
+| `busca.cy.js` | 00:26 | 4 | ✅ 4 | - |
+| `carrinho.cy.js` | 02:47 | 7 | ✅ 7 | - |
+| `checkout.cy.js` | 03:34 | 6 | ✅ 6 | - |
+| `fluxo-completo.cy.js` | 01:08 | 2 | ✅ 2 | - |
+| `login.cy.js` | 00:28 | 6 | ✅ 6 | - |
+| `performance.cy.js` | 02:05 | 20 | ✅ 20 | - |
+| `testes-negativos.cy.js` | 04:15 | 22 | ✅ 22 | - |
+| **TOTAL** | **14:46** | **67** | **✅ 67** | **0** |
+
+### Estatísticas
+
+- ✅ **100% de taxa de sucesso** - Todos os 67 testes passaram
+- ⏱️ **Tempo total de execução**: 14 minutos e 46 segundos
+- 📦 **7 arquivos de teste** executados
+- 🎯 **0 falhas** - Projeto totalmente funcional
+
+### Relatórios
 
 Após a execução dos testes, você encontrará:
 

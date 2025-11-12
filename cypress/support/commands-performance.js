@@ -1,18 +1,3 @@
-// ***********************************************************
-// Commands Customizados para Testes de Performance
-// 
-// Este arquivo contém comandos específicos para medir e validar
-// performance do frontend, seguindo boas práticas de performance testing.
-// ***********************************************************
-
-/**
- * Comando para medir o tempo de carregamento de uma página
- * @param {string} url - URL da página a ser medida
- * @param {number} maxLoadTime - Tempo máximo esperado em ms (padrão: 3000)
- * 
- * Exemplo de uso:
- * cy.measurePageLoad('/produtos', 2000)
- */
 Cypress.Commands.add('measurePageLoad', (url, maxLoadTime = 3000) => {
   const startTime = Date.now()
   
@@ -32,23 +17,11 @@ Cypress.Commands.add('measurePageLoad', (url, maxLoadTime = 3000) => {
     
     cy.log(`⏱️ Tempo de carregamento: ${loadTime.toFixed(2)}ms`)
     cy.log(`⏱️ Tempo total: ${totalTime}ms`)
-    
-    // Validar se está dentro do tempo esperado
     expect(loadTime).to.be.lessThan(maxLoadTime)
-    expect(totalTime).to.be.lessThan(maxLoadTime + 2000) // Margem de erro maior para sites externos
+    expect(totalTime).to.be.lessThan(maxLoadTime + 2000)
   })
 })
 
-/**
- * Comando para medir o tempo de resposta de uma ação
- * @param {Function} action - Função a ser executada e medida
- * @param {number} maxResponseTime - Tempo máximo esperado em ms
- * 
- * Exemplo de uso:
- * cy.measureAction(() => {
- *   cy.get('.product').click()
- * }, 1000)
- */
 Cypress.Commands.add('measureAction', (action, maxResponseTime = 1000) => {
   const startTime = Date.now()
   
@@ -61,14 +34,6 @@ Cypress.Commands.add('measureAction', (action, maxResponseTime = 1000) => {
   })
 })
 
-/**
- * Comando para medir o tempo de renderização de elementos
- * @param {string} selector - Seletor do elemento
- * @param {number} maxRenderTime - Tempo máximo esperado em ms
- * 
- * Exemplo de uso:
- * cy.measureElementRender('.product-list', 500)
- */
 Cypress.Commands.add('measureElementRender', (selector, maxRenderTime = 500) => {
   const startTime = Date.now()
   
@@ -79,40 +44,17 @@ Cypress.Commands.add('measureElementRender', (selector, maxRenderTime = 500) => 
   })
 })
 
-/**
- * Comando para validar métricas de performance do navegador
- * @param {object} thresholds - Limites de performance esperados
- * 
- * Exemplo de uso:
- * cy.validatePerformanceMetrics({
- *   loadEventEnd: 2000,
- *   domContentLoaded: 1500,
- *   firstPaint: 1000
- * })
- */
 Cypress.Commands.add('validatePerformanceMetrics', (thresholds) => {
   return cy.window().then((win) => {
     const perfData = win.performance.timing
     const navigation = win.performance.getEntriesByType('navigation')[0]
     
-    // Calcular métricas
     const metrics = {
-      // Tempo até DOM estar pronto
       domContentLoaded: perfData.domContentLoadedEventEnd - perfData.navigationStart,
-      
-      // Tempo até página estar completamente carregada
       loadEventEnd: perfData.loadEventEnd - perfData.navigationStart,
-      
-      // First Paint (se disponível)
       firstPaint: navigation?.paintTimings?.firstPaint || null,
-      
-      // First Contentful Paint (se disponível)
       firstContentfulPaint: navigation?.paintTimings?.firstContentfulPaint || null,
-      
-      // Tempo de resposta do servidor
       serverResponse: perfData.responseEnd - perfData.requestStart,
-      
-      // Tempo de parsing do DOM
       domParsing: perfData.domComplete - perfData.domInteractive
     }
     
@@ -122,7 +64,6 @@ Cypress.Commands.add('validatePerformanceMetrics', (thresholds) => {
     cy.log(`  - Server Response: ${metrics.serverResponse}ms`)
     cy.log(`  - DOM Parsing: ${metrics.domParsing}ms`)
     
-    // Validar thresholds
     if (thresholds.domContentLoaded) {
       expect(metrics.domContentLoaded).to.be.lessThan(thresholds.domContentLoaded)
     }
@@ -139,14 +80,6 @@ Cypress.Commands.add('validatePerformanceMetrics', (thresholds) => {
   })
 })
 
-/**
- * Comando para medir o tempo de carregamento de imagens
- * @param {string} selector - Seletor das imagens
- * @param {number} maxImageLoadTime - Tempo máximo por imagem em ms
- * 
- * Exemplo de uso:
- * cy.measureImageLoad('.product-image img', 2000)
- */
 Cypress.Commands.add('measureImageLoad', (selector, maxImageLoadTime = 2000) => {
   cy.get(selector).each(($img) => {
     const startTime = Date.now()
@@ -168,21 +101,11 @@ Cypress.Commands.add('measureImageLoad', (selector, maxImageLoadTime = 2000) => 
   })
 })
 
-/**
- * Comando para medir o tempo de resposta de uma requisição AJAX
- * @param {string} method - Método HTTP (GET, POST, etc)
- * @param {string} urlPattern - Padrão da URL a ser interceptada
- * @param {number} maxResponseTime - Tempo máximo esperado em ms
- * 
- * Exemplo de uso:
- * cy.measureAjaxResponse('GET', '/api/products', 500)
- */
 Cypress.Commands.add('measureAjaxResponse', (method, urlPattern, maxResponseTime = 500) => {
   const startTime = Date.now()
   
   cy.intercept(method, urlPattern).as('ajaxRequest')
   
-  // Aguardar a requisição
   cy.wait('@ajaxRequest').then((interception) => {
     const responseTime = interception.response.duration || (Date.now() - startTime)
     cy.log(`⏱️ Tempo de resposta AJAX: ${responseTime}ms`)
@@ -190,13 +113,6 @@ Cypress.Commands.add('measureAjaxResponse', (method, urlPattern, maxResponseTime
   })
 })
 
-/**
- * Comando para validar que não há recursos bloqueantes lentos
- * @param {number} maxResourceTime - Tempo máximo para carregar recursos em ms
- * 
- * Exemplo de uso:
- * cy.validateResourceLoadTime(3000)
- */
 Cypress.Commands.add('validateResourceLoadTime', (maxResourceTime = 3000) => {
   cy.window().then((win) => {
     const resources = win.performance.getEntriesByType('resource')
@@ -209,20 +125,10 @@ Cypress.Commands.add('validateResourceLoadTime', (maxResourceTime = 3000) => {
       })
     }
     
-    // Avisar mas não falhar o teste (pode ser ajustado)
     expect(slowResources.length).to.be.lessThan(5, 'Muitos recursos lentos detectados')
   })
 })
 
-/**
- * Comando para medir o tempo de interação (clique até resposta)
- * @param {string} clickSelector - Seletor do elemento a ser clicado
- * @param {string} responseSelector - Seletor que indica a resposta
- * @param {number} maxInteractionTime - Tempo máximo esperado em ms
- * 
- * Exemplo de uso:
- * cy.measureInteraction('.add-to-cart', '.success-message', 1000)
- */
 Cypress.Commands.add('measureInteraction', (clickSelector, responseSelector, maxInteractionTime = 1000) => {
   const startTime = Date.now()
   

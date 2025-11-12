@@ -1,19 +1,3 @@
-/**
- * Testes de Performance do Frontend
- * 
- * Cenário Crítico: Performance e Responsividade
- * 
- * Justificativa: A performance do frontend impacta diretamente:
- * 1. Experiência do usuário (UX)
- * 2. Taxa de conversão (usuários abandonam sites lentos)
- * 3. SEO (Google penaliza sites lentos)
- * 4. Custos de infraestrutura
- * 5. Satisfação do cliente
- * 
- * Estes testes garantem que o site mantenha performance adequada
- * mesmo com crescimento de tráfego e funcionalidades.
- */
-
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
 import CartPage from '../support/page-objects/CartPage'
@@ -28,7 +12,6 @@ describe('Testes de Performance do Frontend', () => {
       cy.step('Dado que acesso o site')
       cy.step('Quando a página inicial carrega')
       cy.step('Então deve carregar em menos de 11 segundos')
-      // Ajustado para 11s baseado na performance real do site
       cy.measurePageLoad('/', 11000)
     })
 
@@ -36,7 +19,6 @@ describe('Testes de Performance do Frontend', () => {
       cy.step('Dado que acesso a página de produtos')
       cy.step('Quando a página carrega')
       cy.step('Então deve carregar em menos de 12 segundos')
-      // Ajustado para 12s baseado na performance real do site
       cy.measurePageLoad('/produtos', 12000)
     })
 
@@ -44,7 +26,6 @@ describe('Testes de Performance do Frontend', () => {
       cy.step('Dado que acesso a página de login')
       cy.step('Quando a página carrega')
       cy.step('Então deve carregar em menos de 3.5 segundos')
-      // Ajustado para 3.5s baseado na performance real do site
       cy.measurePageLoad('/minha-conta', 3500)
     })
 
@@ -105,7 +86,6 @@ describe('Testes de Performance do Frontend', () => {
       
       cy.step('Quando as imagens são carregadas')
       cy.step('Então cada imagem deve carregar em menos de 2 segundos')
-      // Usar seletor mais específico e verificar se existem imagens visíveis
       cy.get('body').then(($body) => {
         if ($body.find('a[href*="/product/"] img:visible, .product img:visible').length > 0) {
           cy.measureImageLoad('a[href*="/product/"] img:visible, .product img:visible', 2000)
@@ -167,7 +147,6 @@ describe('Testes de Performance do Frontend', () => {
       
       cy.step('Quando adiciono ao carrinho')
       cy.step('Então a resposta deve aparecer em menos de 10 segundos')
-      // Ajustado para 10s baseado na performance real do site
       const startTime = Date.now()
       cy.get('#tbay-main-content button, button.single_add_to_cart_button, button[name="add-to-cart"]').first().click({ force: true })
       cy.wait(2000)
@@ -211,7 +190,6 @@ describe('Testes de Performance do Frontend', () => {
       
       cy.step('Quando atualizo a quantidade')
       cy.step('Então a atualização deve ocorrer em menos de 5 segundos')
-      // Ajustado para 5s baseado na performance real do site
       cy.measureAction(() => {
         CartPage.updateQuantity(0, 3)
       }, 5000)
@@ -229,10 +207,8 @@ describe('Testes de Performance do Frontend', () => {
       cy.step('Então a requisição deve responder em menos de 500ms')
       cy.get('body').then(($body) => {
         if ($body.find('a[href*="/product/"], .product').length > 0) {
-          // Tentar interceptar requisições AJAX, mas não falhar se não houver
           cy.intercept('GET', '**/wp-json/**').as('ajaxRequest')
           cy.wait(2000)
-          // Verificar se a requisição foi feita, mas não falhar se não houver
           cy.get('@ajaxRequest', { timeout: 5000 }).then(() => {
             cy.log('✅ Requisição AJAX detectada')
           }, () => {
@@ -303,7 +279,6 @@ describe('Testes de Performance do Frontend', () => {
       cy.get('a[href*="/product/"]:visible, .product:visible', { timeout: 10000 }).first().should('be.visible').then(() => {
         const navTime = Date.now() - startTime
         cy.log(`⏱️ Tempo de navegação: ${navTime}ms`)
-        // Ajustado para 18s baseado na performance real do site
         expect(navTime).to.be.lessThan(18000)
       })
     })
@@ -326,7 +301,6 @@ describe('Testes de Performance do Frontend', () => {
       cy.then(() => {
         const checkoutTime = Date.now() - startTime
         cy.log(`⏱️ Tempo para carregar checkout: ${checkoutTime}ms`)
-        // Ajustado para 25s baseado na performance real do site
         expect(checkoutTime).to.be.lessThan(25000)
       })
     })
@@ -342,7 +316,6 @@ describe('Testes de Performance do Frontend', () => {
       const startTime = Date.now()
       
       cy.step('Quando adiciono 3 produtos')
-      // Reduzido para 3 produtos para evitar timeout
       for (let i = 0; i < 3; i++) {
         cy.get('a[href*="/product/"]:visible', { timeout: 10000 }).eq(i).click({ force: true })
         cy.wait(1000)
@@ -360,7 +333,6 @@ describe('Testes de Performance do Frontend', () => {
         const avgTime = totalTime / 3
         cy.log(`⏱️ Tempo total: ${totalTime}ms`)
         cy.log(`⏱️ Tempo médio por produto: ${avgTime.toFixed(2)}ms`)
-        // Ajustado para 18s baseado na performance real do site
         expect(avgTime).to.be.lessThan(18000)
       })
     })

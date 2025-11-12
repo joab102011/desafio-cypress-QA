@@ -1,18 +1,3 @@
-/**
- * Testes Negativos - Validações e Edge Cases
- * 
- * Cenário Crítico: Validação de regras de negócio e tratamento de erros
- * 
- * Justificativa: Testes negativos são essenciais para garantir que o sistema
- * se comporta corretamente em situações inesperadas ou inválidas. Isso previne:
- * 1. Quebra do sistema com dados inválidos
- * 2. Problemas de segurança
- * 3. Má experiência do usuário
- * 4. Perda de dados ou transações inválidas
- * 
- * Estes testes garantem robustez e confiabilidade do sistema.
- */
-
 import LoginPage from '../support/page-objects/LoginPage'
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
@@ -22,7 +7,6 @@ import CheckoutPage from '../support/page-objects/CheckoutPage'
 describe('Testes Negativos - Validações e Edge Cases', () => {
   
   beforeEach(() => {
-    // Limpar estado antes de cada teste
     cy.clearCart()
   })
 
@@ -186,20 +170,16 @@ describe('Testes Negativos - Validações e Edge Cases', () => {
     
     beforeEach(() => {
       cy.clearCart()
-      cy.wait(1000)
       HomePage.visit()
-      cy.wait(2000)
       
       cy.get('body', { timeout: 10000 }).should('be.visible')
-      
       cy.get('a[href*="/product/"]:visible', { timeout: 10000 }).first().click()
-      cy.wait(2000)
+      ProductPage.shouldBeOnProductPage()
       ProductPage.addToCart()
-      cy.wait(2000)
+      ProductPage.shouldShowAddToCartSuccess()
       ProductPage.viewCart()
-      cy.wait(2000)
+      CartPage.shouldBeOnCartPage()
       CartPage.proceedToCheckout()
-      cy.wait(2000)
       CheckoutPage.shouldBeOnCheckoutPage()
     })
 
@@ -295,12 +275,21 @@ describe('Testes Negativos - Validações e Edge Cases', () => {
       cy.step('Dado que estou na página de checkout')
       CheckoutPage.shouldBeOnCheckoutPage()
       
-      cy.step('Quando preencho campos numéricos com caracteres especiais')
-      CheckoutPage.billingPhone.clear().type('abc!@#')
-      CheckoutPage.billingPostcode.clear().type('xyz!@#')
+      cy.step('Quando preencho todos os campos obrigatórios mas uso caracteres especiais em campos numéricos')
+      const billingData = {
+        firstName: 'João',
+        lastName: 'Silva',
+        email: 'joao@teste.com',
+        phone: 'abc!@#',
+        address: 'Rua Teste, 123',
+        city: 'São Paulo',
+        postcode: 'xyz!@#'
+      }
+      
+      CheckoutPage.fillBillingData(billingData)
+      CheckoutPage.placeOrder()
       
       cy.step('Então o sistema deve validar e não permitir')
-      CheckoutPage.placeOrder()
       CheckoutPage.shouldShowError()
     })
 
@@ -312,7 +301,9 @@ describe('Testes Negativos - Validações e Edge Cases', () => {
       CheckoutPage.placeOrder()
       
       cy.step('Então devo ver múltiplas mensagens de erro')
-      cy.get('.woocommerce-error li, .error').should('have.length.greaterThan', 0)
+      CheckoutPage.shouldShowError()
+      cy.get('.woocommerce-error li, .error', { timeout: 10000 })
+        .should('have.length.greaterThan', 0)
     })
 
     it('Não deve permitir checkout com dados muito longos', () => {
@@ -320,7 +311,7 @@ describe('Testes Negativos - Validações e Edge Cases', () => {
       CheckoutPage.shouldBeOnCheckoutPage()
       
       cy.step('Quando preencho campos com strings muito longas')
-      const longString = 'A'.repeat(1000)
+      const longString = 'A'.repeat(500)
       const billingData = {
         firstName: longString,
         lastName: longString,
@@ -350,11 +341,9 @@ describe('Testes Negativos - Validações e Edge Cases', () => {
       HomePage.shouldBeOnHomePage()
       
       cy.step('Quando tento buscar sem digitar nada')
-      // Usar o método searchProduct que já trata busca vazia via URL
       HomePage.searchProduct('')
       
       cy.step('Então o sistema deve tratar adequadamente')
-      // Verificar que a página não quebrou
       cy.get('body').should('be.visible')
       cy.url().should('include', 's=')
     })

@@ -237,7 +237,6 @@ class ProductPage {
         cy.wrap($el[0]).click({ force: true })
       })
     
-    // Aguardar resposta do servidor após adicionar ao carrinho
     cy.get('body', { timeout: 5000 }).should('be.visible')
   }
 

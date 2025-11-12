@@ -1,12 +1,4 @@
-/**
- * Page Object para a página de checkout
- * 
- * Este arquivo contém os seletores e métodos relacionados à página de checkout.
- * Seletores ajustados baseados na estrutura real do site http://lojaebac.ebaconline.art.br
- */
-
 class CheckoutPage {
-  // Seletores da página de checkout - Dados de cobrança
   get billingFirstName() {
     return cy.get('#billing_first_name')
   }
@@ -43,7 +35,6 @@ class CheckoutPage {
     return cy.get('#billing_state')
   }
 
-  // Seletores de métodos de pagamento
   get paymentMethods() {
     return cy.get('.payment_methods input[type="radio"], input[name="payment_method"]')
   }
@@ -52,7 +43,6 @@ class CheckoutPage {
     return cy.get('#place_order, button[name="woocommerce_checkout_place_order"], button:contains("Finalizar pedido")')
   }
 
-  // Seletores de validação
   get errorMessages() {
     return cy.get('.woocommerce-error, .error, ul.woocommerce-error li')
   }
@@ -65,22 +55,14 @@ class CheckoutPage {
     return cy.get('.order-number, .woocommerce-order-overview__order strong')
   }
 
-  // Seletores do resumo do carrinho
   get cartTotal() {
     return cy.get('.order-total .amount, .order-total, .cart-total')
   }
 
-  /**
-   * Visita a página de checkout
-   */
   visit() {
     cy.visit('/checkout')
   }
 
-  /**
-   * Preenche os dados de cobrança
-   * @param {object} billingData - Objeto com os dados de cobrança
-   */
   fillBillingData(billingData) {
     if (billingData.firstName) {
       this.billingFirstName.should('be.visible').clear()
@@ -118,7 +100,6 @@ class CheckoutPage {
     }
     
     if (billingData.country) {
-      // O campo country pode estar coberto pelo topbar, então usar force diretamente
       cy.get('#billing_country').should('exist').select(billingData.country, { force: true })
     }
     
@@ -127,16 +108,11 @@ class CheckoutPage {
     }
   }
 
-  /**
-   * Seleciona método de pagamento
-   * @param {string} paymentMethod - Método de pagamento (ex: 'bacs', 'cheque', 'cod')
-   */
   selectPaymentMethod(paymentMethod) {
     cy.get('body').then(($body) => {
       if ($body.find(`input[value="${paymentMethod}"]`).length > 0) {
         cy.get(`input[value="${paymentMethod}"]`).should('be.visible').check()
       } else {
-        // Se não encontrar, selecionar o primeiro disponível
         if ($body.find('input[name="payment_method"]').length > 0) {
           cy.get('input[name="payment_method"]').first().should('be.visible').check()
         }
@@ -144,27 +120,18 @@ class CheckoutPage {
     })
   }
 
-  /**
-   * Finaliza o pedido
-   */
   placeOrder() {
-    // Quebrar a cadeia para evitar problema de elemento que desaparece
     cy.get('#place_order, button[name="woocommerce_checkout_place_order"], input#place_order').then(($btn) => {
       if ($btn.length > 0) {
         cy.wrap($btn[0]).click({ force: true })
       } else {
-        // Fallback: procurar por qualquer botão de finalizar
         cy.get('button:contains("Finalizar"), button:contains("Place order"), input[type="submit"]').first().click({ force: true })
       }
     })
     
-    // Aguardar processamento usando should ao invés de wait arbitrário
     cy.get('body', { timeout: 10000 }).should('be.visible')
   }
 
-  /**
-   * Verifica se o pedido foi realizado com sucesso
-   */
   shouldShowOrderReceived() {
     cy.get('body', { timeout: 10000 }).then(($body) => {
       const bodyText = $body.text()
@@ -174,25 +141,42 @@ class CheckoutPage {
     })
   }
 
-  /**
-   * Verifica mensagens de erro
-   * @param {string} expectedMessage - Mensagem esperada (opcional)
-   */
   shouldShowError(expectedMessage) {
-    cy.get('body').then(($body) => {
-      if ($body.find('.woocommerce-error, .error').length > 0) {
+    cy.get('.woocommerce-error, .error, ul.woocommerce-error li', { timeout: 10000 }).then(($errors) => {
+      if ($errors.length > 0) {
         if (expectedMessage) {
-          this.errorMessages.should('be.visible').and('contain', expectedMessage)
+          cy.get('.woocommerce-error, .error, ul.woocommerce-error li')
+            .should('be.visible')
+            .then(($error) => {
+              const errorText = $error.text().toLowerCase()
+              const expectedLower = expectedMessage.toLowerCase()
+              expect(errorText).to.satisfy((text) => {
+                return text.includes(expectedLower) || 
+                       (expectedLower.includes('email') && (text.includes('email') || text.includes('e-mail'))) ||
+                       (expectedLower.includes('obrigatório') && (text.includes('obrigatório') || text.includes('required')))
+              })
+              })
         } else {
-          this.errorMessages.should('be.visible')
+          cy.get('.woocommerce-error, .error, ul.woocommerce-error li')
+            .should('be.visible')
+            .should('have.length.greaterThan', 0)
         }
+      } else {
+        cy.get('input[required]').then(($inputs) => {
+          if ($inputs.length > 0) {
+            $inputs.each((index, input) => {
+              if (!input.value) {
+                cy.wrap(input).should('have.attr', 'required')
+              }
+            })
+          } else {
+            cy.url().should('include', '/checkout')
+          }
+        })
       }
     })
   }
 
-  /**
-   * Verifica se está na página de checkout
-   */
   shouldBeOnCheckoutPage() {
     cy.url().should('include', '/checkout')
     this.placeOrderButton.should('be.visible')

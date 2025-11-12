@@ -28,11 +28,9 @@ describe('Testes de Login - Cenário Crítico', () => {
           bodyText.includes('Logout') || !bodyText.includes('Username or email address')) {
         cy.log('✅ Login realizado com sucesso')
       } else {
-        // Se houver erro, verificar se é por credenciais inválidas
         cy.get('body').then(($body) => {
           if ($body.find('.woocommerce-error').length > 0) {
             cy.log('⚠️ Erro ao fazer login - verifique as credenciais em cypress.env.json')
-            // Não falhar o teste se for problema de credenciais
             cy.get('.woocommerce-error').should('exist')
           }
         })
@@ -97,7 +95,6 @@ describe('Testes de Login - Cenário Crítico', () => {
       if (bodyText.includes('Recuperar senha') || bodyText.includes('Lost password') || bodyText.includes('Reset password')) {
         cy.contains(/Recuperar senha|Lost password|Reset password/i).should('be.visible')
       } else {
-        // Verificar se está na página correta pela URL
         cy.url().should('include', '/lost-password')
       }
     })
