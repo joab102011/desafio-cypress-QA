@@ -315,7 +315,7 @@ O projeto utiliza Page Objects para organizar os seletores e métodos de cada p�
 
 ### Retry
 
-- `runMode`: 2 retries em modo headless
+- `runMode`: 0 retries em modo headless (desabilitado - site tem performance estável)
 - `openMode`: 0 retries no modo interativo
 
 ### Vídeos e Screenshots
@@ -328,8 +328,8 @@ O projeto utiliza Page Objects para organizar os seletores e métodos de cada p�
 O projeto inclui tratamento para erros comuns:
 
 - Erros de JavaScript de terceiros (ex: ResizeObserver)
-- Flaky tests com retry automático
-- Validações robustas com múltiplas tentativas
+- Validações robustas com timeouts adequados
+- Site com performance estável, sem necessidade de retry
 
 ## 📊 Relatórios
 
@@ -409,10 +409,10 @@ O workflow está configurado com:
    - ✅ Garante que código segue padrões estabelecidos
    - ✅ Mantém consistência do código
 
-4. **Retry Automático**
-   - ✅ Configurado no `cypress.config.js` (2 retries em modo headless)
-   - ✅ Reduz flaky tests automaticamente
-   - ✅ Implementa a recomendação de "testa e retesta"
+4. **Retry Desabilitado**
+   - ✅ Retry desabilitado no `cypress.config.js` (0 retries)
+   - ✅ Site tem performance estável, não há necessidade de retry
+   - ✅ Testes executam uma única vez, mais rápido e direto
 
 5. **Artifacts para Debug**
    - ✅ Vídeos dos testes sempre disponíveis
@@ -483,5 +483,3 @@ Desenvolvido como parte do desafio técnico para vaga de QA Automation.
 Este projeto é privado e foi desenvolvido exclusivamente para fins de avaliação técnica.
 
 ---
-
-**Boa sorte com os testes! 🚀**

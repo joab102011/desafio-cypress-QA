@@ -17,11 +17,10 @@ module.exports = defineConfig({
   // Timeout para resposta de página
   pageLoadTimeout: 30000,
   
-  // Configuração de retry para testes que falham (evita flaky tests)
-  // Seguindo recomendação do entrevistador de testar e retestar
+  // Configuração de retry desabilitada - site tem performance estável, não há necessidade de retry
   retries: {
-    runMode: 2, // Retry 2 vezes em modo headless (CI/CD)
-    openMode: 0 // Não retry no modo interativo
+    runMode: 0, // Sem retry em modo headless (CI/CD)
+    openMode: 0 // Sem retry no modo interativo
   },
   
   // Configuração de vídeo e screenshots

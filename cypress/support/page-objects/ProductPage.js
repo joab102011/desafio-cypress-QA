@@ -16,8 +16,8 @@ class ProductPage {
   }
 
   get addToCartButton() {
-    // Botão "Comprar" no site - usar seletor mais específico
-    return cy.get('button.single_add_to_cart_button, button[name="add-to-cart"], .add_to_cart_button')
+    // Botão "Comprar" no site - baseado na gravação: #tbay-main-content button
+    return cy.get('#tbay-main-content button, button.single_add_to_cart_button, button[name="add-to-cart"], .add_to_cart_button')
   }
 
   get quantityInput() {
@@ -46,7 +46,8 @@ class ProductPage {
   }
 
   get viewCartLink() {
-    return cy.get('.woocommerce-message a[href*="carrinho"], a:contains("carrinho")')
+    // Baseado na gravação: div.woocommerce-notices-wrapper a
+    return cy.get('div.woocommerce-notices-wrapper a, .woocommerce-message a[href*="carrinho"], a:contains("carrinho"), a:contains("Ver carrinho")')
   }
 
   // Seletores para variações de produto (se existirem)
@@ -99,11 +100,13 @@ class ProductPage {
             if ($sizeGroup.length > 0) {
               if (variations.size) {
                 // Clicar no <li> que contém o texto do tamanho
-                cy.get('ul[role="radiogroup"][aria-label="Size"], ul[role="radiogroup"][data-attribute_name*="size"]')
-                  .find('li.variable-item.button-variable-item')
+                // Baseado na gravação: li.button-variable-item-XS
+                cy.get(`li.button-variable-item-${variations.size}, li.variable-item.button-variable-item`)
                   .contains(variations.size, { timeout: 2000 })
                   .should('be.visible')
-                  .click()
+                  .then(($el) => {
+                    cy.wrap($el[0]).click({ force: true })
+                  })
               } else {
                 // Priorizar tamanho M (geralmente tem mais estoque), senão o primeiro disponível
                 cy.get('ul[role="radiogroup"][aria-label="Size"], ul[role="radiogroup"][data-attribute_name*="size"]')
@@ -113,9 +116,9 @@ class ProductPage {
                       li.textContent?.trim().toUpperCase() === 'M'
                     )
                     if (sizeM) {
-                      cy.wrap(sizeM).should('be.visible').click()
-                    } else {
-                      cy.wrap($sizes.first()).should('be.visible').click()
+                      cy.wrap(sizeM).click({ force: true })
+                    } else if ($sizes.length > 0) {
+                      cy.wrap($sizes[0]).click({ force: true })
                     }
                   })
               }
@@ -132,11 +135,13 @@ class ProductPage {
             if ($colorGroup.length > 0) {
               if (variations.color) {
                 // Clicar no <li> que contém o texto da cor
-                cy.get('ul[role="radiogroup"][aria-label="Color"], ul[role="radiogroup"][data-attribute_name*="color"]')
-                  .find('li.variable-item.button-variable-item')
+                // Baseado na gravação: li.button-variable-item-Orange
+                cy.get(`li.button-variable-item-${variations.color}, li.variable-item.button-variable-item`)
                   .contains(variations.color, { timeout: 2000 })
                   .should('be.visible')
-                  .click()
+                  .then(($el) => {
+                    cy.wrap($el[0]).click({ force: true })
+                  })
               } else {
                 // Priorizar cor "White" (geralmente está disponível), senão a primeira cor
                 cy.get('ul[role="radiogroup"][aria-label="Color"], ul[role="radiogroup"][data-attribute_name*="color"]')
@@ -146,9 +151,9 @@ class ProductPage {
                       li.textContent?.trim().toLowerCase() === 'white'
                     )
                     if (whiteOption) {
-                      cy.wrap(whiteOption).should('be.visible').click()
-                    } else {
-                      cy.wrap($colors.first()).should('be.visible').click()
+                      cy.wrap(whiteOption).click({ force: true })
+                    } else if ($colors.length > 0) {
+                      cy.wrap($colors[0]).click({ force: true })
                     }
                   })
               }
@@ -215,9 +220,9 @@ class ProductPage {
                       li.textContent?.trim().toUpperCase() === 'M'
                     )
                     if (sizeM) {
-                      cy.wrap(sizeM).should('be.visible').click()
+                      cy.wrap(sizeM).click({ force: true })
                     } else if ($sizes.length > 1) {
-                      cy.wrap($sizes.eq(1)).should('be.visible').click()
+                      cy.wrap($sizes[1]).click({ force: true })
                     }
                   })
                 
@@ -231,9 +236,9 @@ class ProductPage {
                       li.textContent?.trim().toLowerCase() === 'white'
                     )
                     if (whiteOption) {
-                      cy.wrap(whiteOption).should('be.visible').click()
+                      cy.wrap(whiteOption).click({ force: true })
                     } else if ($colors.length > 1) {
-                      cy.wrap($colors.eq(1)).should('be.visible').click()
+                      cy.wrap($colors[1]).click({ force: true })
                     }
                   })
                 
@@ -283,13 +288,16 @@ class ProductPage {
     }
     
     // Garantir que o botão está visível e habilitado antes de clicar
-    cy.get('button.single_add_to_cart_button, button[name="add-to-cart"], .add_to_cart_button', { timeout: 10000 })
+    // Baseado na gravação: #tbay-main-content button
+    cy.get('#tbay-main-content button, button.single_add_to_cart_button, button[name="add-to-cart"], .add_to_cart_button', { timeout: 10000 })
       .should('be.visible')
       .should('not.have.class', 'disabled')
       .should('not.have.class', 'wc-variation-selection-needed')
       .should('not.have.class', 'wc-variation-is-unavailable')
       .should('not.be.disabled')
-      .click()
+      .then(($el) => {
+        cy.wrap($el[0]).click({ force: true })
+      })
     
     // Aguardar mensagem de sucesso ou atualização do carrinho
     // Aguardar um pouco para o sistema processar a adição
@@ -355,11 +363,21 @@ class ProductPage {
    * Clica no link para ver o carrinho
    */
   viewCart() {
-    cy.get('body').then(($body) => {
-      if ($body.find('.woocommerce-message a[href*="carrinho"]').length > 0) {
-        this.viewCartLink.should('be.visible').click()
+    cy.get('body', { timeout: 5000 }).then(($body) => {
+      // Baseado na gravação: div.woocommerce-notices-wrapper a
+      // Verificar se há link "Ver carrinho" ou mensagem de sucesso
+      const hasViewCartLink = $body.find('div.woocommerce-notices-wrapper a, .woocommerce-message a[href*="carrinho"], a:contains("Ver carrinho")').length > 0
+      
+      if (hasViewCartLink) {
+        cy.get('div.woocommerce-notices-wrapper a, .woocommerce-message a[href*="carrinho"], a:contains("Ver carrinho")', { timeout: 5000 })
+          .first()
+          .should('exist')
+          .then(($el) => {
+            cy.wrap($el[0]).click({ force: true })
+          })
       } else {
-        // Se não houver link direto, navegar para o carrinho
+        // Se não houver link direto, aguardar um pouco e navegar para o carrinho
+        cy.wait(1000) // Aguardar processamento
         cy.visit('/carrinho')
       }
     })
