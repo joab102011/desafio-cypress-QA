@@ -35,7 +35,7 @@ Cypress.Commands.add('measurePageLoad', (url, maxLoadTime = 3000) => {
     
     // Validar se está dentro do tempo esperado
     expect(loadTime).to.be.lessThan(maxLoadTime)
-    expect(totalTime).to.be.lessThan(maxLoadTime + 500) // Margem de erro
+    expect(totalTime).to.be.lessThan(maxLoadTime + 2000) // Margem de erro maior para sites externos
   })
 })
 
@@ -91,7 +91,7 @@ Cypress.Commands.add('measureElementRender', (selector, maxRenderTime = 500) => 
  * })
  */
 Cypress.Commands.add('validatePerformanceMetrics', (thresholds) => {
-  cy.window().then((win) => {
+  return cy.window().then((win) => {
     const perfData = win.performance.timing
     const navigation = win.performance.getEntriesByType('navigation')[0]
     
@@ -135,7 +135,7 @@ Cypress.Commands.add('validatePerformanceMetrics', (thresholds) => {
       expect(metrics.serverResponse).to.be.lessThan(thresholds.serverResponse)
     }
     
-    return metrics
+    return cy.wrap(metrics)
   })
 })
 
