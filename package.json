@@ -1,7 +1,7 @@
 {
   "name": "desafio-cypress-qa",
   "version": "1.0.0",
-  "description": "Projeto de automação de testes com Cypress para o site lojaebac.ebaconline.art.br",
+  "description": "Projeto de automação de testes end-to-end (E2E) utilizando Cypress para o site lojaebac.ebaconline.art.br",
   "main": "index.js",
   "scripts": {
     "cy:open": "cypress open",
@@ -9,19 +9,38 @@
     "cy:run:chrome": "cypress run --browser chrome",
     "cy:run:firefox": "cypress run --browser firefox",
     "cy:run:edge": "cypress run --browser edge",
-    "test": "cypress run"
+    "cy:run:headed": "cypress run --headed",
+    "cy:run:chrome:headed": "cypress run --browser chrome --headed",
+    "test": "cypress run",
+    "test:chrome": "cypress run --browser chrome",
+    "test:firefox": "cypress run --browser firefox",
+    "test:edge": "cypress run --browser edge",
+    "test:smoke": "cypress run --spec 'cypress/e2e/login.cy.js'",
+    "test:critical": "cypress run --spec 'cypress/e2e/login.cy.js,cypress/e2e/checkout.cy.js'",
+    "lint": "eslint cypress/**/*.js",
+    "lint:fix": "eslint cypress/**/*.js --fix",
+    "format": "prettier --write \"cypress/**/*.{js,json}\"",
+    "format:check": "prettier --check \"cypress/**/*.{js,json}\""
   },
   "keywords": [
     "cypress",
     "automation",
     "testing",
     "qa",
-    "e2e"
+    "e2e",
+    "ci-cd",
+    "github-actions"
   ],
   "author": "Joabe",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^13.6.0"
+    "cypress": "^13.6.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-cypress": "^2.15.1",
+    "prettier": "^3.2.5"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
   }
 }
-

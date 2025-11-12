@@ -1,5 +1,10 @@
 # Desafio Cypress QA
 
+[![Cypress Tests](https://github.com/joab102011/desafio-cypress-QA/actions/workflows/cypress-tests.yml/badge.svg)](https://github.com/joab102011/desafio-cypress-QA/actions/workflows/cypress-tests.yml)
+[![Lint](https://github.com/joab102011/desafio-cypress-QA/actions/workflows/lint.yml/badge.svg)](https://github.com/joab102011/desafio-cypress-QA/actions/workflows/lint.yml)
+[![Cypress](https://img.shields.io/badge/Cypress-13.6.0-brightgreen)](https://www.cypress.io/)
+[![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
+
 Projeto de automação de testes end-to-end (E2E) utilizando Cypress para o site **lojaebac.ebaconline.art.br**.
 
 ## 📋 Sobre o Projeto
@@ -11,6 +16,9 @@ Este projeto foi desenvolvido como parte de um desafio técnico, seguindo as mel
 - ✅ **Comentários detalhados** em todo o código
 - ✅ Padrão **BDD (Given/When/Then)** nos testes
 - ✅ Estrutura fácil de manter e escalar
+- ✅ **CI/CD com GitHub Actions** para qualidade contínua
+- ✅ **Lint e formatação** automatizados
+- ✅ Testes em **múltiplos navegadores** (Chrome, Firefox, Edge)
 
 ## 🎯 Cenários Automatizados
 
@@ -165,6 +173,38 @@ npx cypress run --spec "cypress/e2e/login.cy.js"
 
 # Executar apenas testes de carrinho
 npx cypress run --spec "cypress/e2e/carrinho.cy.js"
+
+# Executar testes críticos (smoke tests)
+npm run test:smoke
+
+# Executar testes críticos (login + checkout)
+npm run test:critical
+```
+
+### Executar com Modo Headed (com interface gráfica)
+
+```bash
+# Executar com interface gráfica
+npm run cy:run:headed
+
+# Executar Chrome com interface
+npm run cy:run:chrome:headed
+```
+
+### Lint e Formatação
+
+```bash
+# Verificar problemas de lint
+npm run lint
+
+# Corrigir problemas de lint automaticamente
+npm run lint:fix
+
+# Verificar formatação
+npm run format:check
+
+# Formatar código automaticamente
+npm run format
 ```
 
 ## 📁 Estrutura do Projeto
@@ -195,8 +235,15 @@ desafio-cypress-QA/
 │   ├── videos/                 # Vídeos dos testes (gerado automaticamente)
 │   └── screenshots/            # Screenshots de falhas (gerado automaticamente)
 │
+├── .github/
+│   └── workflows/              # Workflows do GitHub Actions
+│       ├── cypress-tests.yml    # Pipeline de testes
+│       └── lint.yml            # Pipeline de lint
 ├── cypress.config.js           # Configuração do Cypress
 ├── cypress.env.json            # Variáveis de ambiente
+├── .eslintrc.json              # Configuração do ESLint
+├── .prettierrc.json            # Configuração do Prettier
+├── .gitignore                  # Arquivos ignorados pelo Git
 ├── package.json                # Dependências do projeto
 └── README.md                   # Este arquivo
 ```
@@ -207,6 +254,10 @@ desafio-cypress-QA/
 - **JavaScript** - Linguagem de programação
 - **Page Object Pattern** - Padrão de design para organização do código
 - **BDD** - Behavior Driven Development para escrita dos testes
+- **ESLint** - Linter para qualidade de código
+- **Prettier** - Formatador de código
+- **GitHub Actions** - CI/CD automatizado
+- **Node.js** 18+ - Runtime JavaScript
 
 ## 📝 Commands Customizados
 
@@ -275,6 +326,42 @@ Após a execução dos testes, você encontrará:
 
 - **Vídeos**: Em `cypress/videos/` (um vídeo por arquivo de teste)
 - **Screenshots**: Em `cypress/screenshots/` (capturados em caso de falha)
+
+### Relatórios no GitHub Actions
+
+Os testes executados via GitHub Actions geram automaticamente:
+- ✅ Artifacts com vídeos dos testes
+- ✅ Screenshots em caso de falha
+- ✅ Relatórios consolidados por navegador
+- ✅ Status de execução visível no PR
+
+## 🔄 CI/CD - GitHub Actions ⭐ DIFERENCIAL
+
+O projeto inclui pipelines automatizados de CI/CD:
+
+### Workflows Disponíveis
+
+1. **Cypress Tests** (`.github/workflows/cypress-tests.yml`)
+   - Executa testes em Chrome, Firefox e Edge
+   - Execução paralela para otimização
+   - Upload automático de vídeos e screenshots
+   - Comentários automáticos em Pull Requests
+
+2. **Lint e Formatação** (`.github/workflows/lint.yml`)
+   - Verifica qualidade de código com ESLint
+   - Valida formatação com Prettier
+   - Bloqueia merge se houver erros
+
+### Execução Automática
+
+Os workflows são executados automaticamente quando:
+- ✅ Push para `main` ou `develop`
+- ✅ Pull Request para `main` ou `develop`
+- ✅ Execução manual via GitHub Actions UI
+
+### Status dos Testes
+
+Você pode verificar o status dos testes através dos badges no topo do README ou acessando a aba "Actions" do repositório.
 
 ## 🔧 Manutenção
 

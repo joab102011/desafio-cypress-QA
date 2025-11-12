@@ -18,8 +18,9 @@ module.exports = defineConfig({
   pageLoadTimeout: 30000,
   
   // Configuração de retry para testes que falham (evita flaky tests)
+  // Seguindo recomendação do entrevistador de testar e retestar
   retries: {
-    runMode: 2, // Retry 2 vezes em modo headless
+    runMode: 2, // Retry 2 vezes em modo headless (CI/CD)
     openMode: 0 // Não retry no modo interativo
   },
   
@@ -28,9 +29,15 @@ module.exports = defineConfig({
   screenshotOnRunFailure: true,
   trashAssetsBeforeRuns: true,
   
+  // Configuração de vídeo (otimização para CI/CD)
+  videoCompression: 32,
+  videosFolder: 'cypress/videos',
+  screenshotsFolder: 'cypress/screenshots',
+  
   // Configuração do ambiente
   env: {
     // URL base será carregada do cypress.env.json
+    // Variáveis adicionais podem ser adicionadas aqui
   },
   
   // Configuração de e2e
@@ -47,8 +54,21 @@ module.exports = defineConfig({
     // Configuração de setup
     setupNodeEvents(on, config) {
       // Implementar plugins aqui se necessário
+      // Exemplo: relatórios, integrações, etc.
+      
+      // Listener para eventos de teste
+      on('task', {
+        log(message) {
+          console.log(message)
+          return null
+        }
+      })
+      
       return config
     },
+    
+    // Configuração de execução
+    experimentalRunAllSpecs: false, // Desabilitado para melhor performance
   },
   
   // Configuração de componente (não utilizado neste projeto)
@@ -58,5 +78,8 @@ module.exports = defineConfig({
       bundler: 'webpack',
     },
   },
+  
+  // Configurações para CI/CD
+  // Otimizações para execução em pipelines
+  numTestsKeptInMemory: 0, // Reduz uso de memória em CI
 })
-

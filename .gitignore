@@ -8,16 +8,24 @@ cypress/videos/
 cypress/screenshots/
 cypress/downloads/
 cypress.env.json
+cypress/reports/
 
 # Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
 
 # Sistema Operacional
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Desktop.ini
 
 # IDEs
 .vscode/
@@ -25,8 +33,30 @@ Thumbs.db
 *.swp
 *.swo
 *~
+.project
+.classpath
+.settings/
+*.sublime-project
+*.sublime-workspace
 
 # Arquivos temporários
 *.tmp
 *.temp
+*.cache
 
+# Arquivos de ambiente
+.env
+.env.local
+.env.*.local
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Build
+dist/
+build/
+
+# Cypress artifacts (mantido no gitignore mas pode ser commitado se necessário)
+# cypress/videos/
+# cypress/screenshots/
