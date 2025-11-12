@@ -1,7 +1,6 @@
 # Desafio Cypress QA
 
 [![Cypress Tests](https://github.com/joab102011/desafio-cypress-QA/actions/workflows/cypress-tests.yml/badge.svg)](https://github.com/joab102011/desafio-cypress-QA/actions/workflows/cypress-tests.yml)
-[![Lint](https://github.com/joab102011/desafio-cypress-QA/actions/workflows/lint.yml/badge.svg)](https://github.com/joab102011/desafio-cypress-QA/actions/workflows/lint.yml)
 [![Cypress](https://img.shields.io/badge/Cypress-13.6.0-brightgreen)](https://www.cypress.io/)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 
@@ -237,8 +236,7 @@ desafio-cypress-QA/
 │
 ├── .github/
 │   └── workflows/              # Workflows do GitHub Actions
-│       ├── cypress-tests.yml    # Pipeline de testes
-│       └── lint.yml            # Pipeline de lint
+│       └── cypress-tests.yml    # Pipeline de testes (executa em push)
 ├── cypress.config.js           # Configuração do Cypress
 ├── cypress.env.json            # Variáveis de ambiente
 ├── .eslintrc.json              # Configuração do ESLint
@@ -337,27 +335,54 @@ Os testes executados via GitHub Actions geram automaticamente:
 
 ## 🔄 CI/CD - GitHub Actions ⭐ DIFERENCIAL
 
-O projeto inclui pipelines automatizados de CI/CD:
+O projeto inclui pipeline automatizado de CI/CD configurado para executar automaticamente a cada push.
 
-### Workflows Disponíveis
+### Workflow de Testes
 
-1. **Cypress Tests** (`.github/workflows/cypress-tests.yml`)
-   - Executa testes em Chrome, Firefox e Edge
-   - Execução paralela para otimização
-   - Upload automático de vídeos e screenshots
-   - Comentários automáticos em Pull Requests
+**Arquivo:** `.github/workflows/cypress-tests.yml`
 
-2. **Lint e Formatação** (`.github/workflows/lint.yml`)
-   - Verifica qualidade de código com ESLint
-   - Valida formatação com Prettier
-   - Bloqueia merge se houver erros
+**Justificativa da Configuração:**
 
-### Execução Automática
+Este workflow foi configurado seguindo as recomendações do entrevistador de garantir **qualidade contínua** e **testar e retestar várias vezes**. A configuração atual atende aos seguintes requisitos:
 
-Os workflows são executados automaticamente quando:
-- ✅ Push para `main` ou `develop`
-- ✅ Pull Request para `main` ou `develop`
-- ✅ Execução manual via GitHub Actions UI
+1. **Execução Automática em Push**
+   - ✅ Roda automaticamente a cada push na branch `main`
+   - ✅ Garante que todo código commitado seja testado
+   - ✅ Alinha com a recomendação de "testa e retesta várias vezes"
+   - ✅ Evita que código com problemas seja integrado
+
+2. **Testes no Navegador Padrão**
+   - ✅ Utiliza o navegador padrão do Cypress (Electron)
+   - ✅ Execução mais rápida e eficiente
+   - ✅ Suficiente para validação de funcionalidades
+   - ✅ Reduz tempo de execução do pipeline
+
+3. **Validação de Qualidade de Código**
+   - ✅ ESLint executado antes dos testes
+   - ✅ Garante que código segue padrões estabelecidos
+   - ✅ Mantém consistência do código (recomendação do entrevistador)
+
+4. **Retry Automático**
+   - ✅ Configurado no `cypress.config.js` (2 retries em modo headless)
+   - ✅ Reduz flaky tests automaticamente
+   - ✅ Implementa a recomendação de "testa e retesta"
+
+5. **Artifacts para Debug**
+   - ✅ Vídeos dos testes sempre disponíveis
+   - ✅ Screenshots em caso de falha
+   - ✅ Facilita identificação e correção de problemas
+   - ✅ Permite análise detalhada de falhas
+
+6. **Otimização de Performance**
+   - ✅ Cache de dependências npm
+   - ✅ Execução paralela de jobs
+   - ✅ Reduz tempo de execução do pipeline
+
+### Execução
+
+O workflow é executado automaticamente quando:
+- ✅ Push para `main`
+- ✅ Execução manual via GitHub Actions UI (workflow_dispatch)
 
 ### Status dos Testes
 
@@ -393,7 +418,7 @@ Você pode verificar o status dos testes através dos badges no topo do README o
 
 ## 👤 Autor
 
-**Joabe**
+**Joab Alexandre da Cruz**
 
 Desenvolvido como parte do desafio técnico para vaga de QA Automation.
 
