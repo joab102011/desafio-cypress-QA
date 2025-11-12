@@ -43,7 +43,11 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
     ProductPage.shouldShowAddToCartSuccess()
     
     cy.step('E o carrinho deve mostrar 1 item')
+    // Aguardar um pouco para garantir que o carrinho foi atualizado no header
+    cy.get('body', { timeout: 2000 }).should('be.visible')
     HomePage.visit()
+    // Aguardar a página carregar completamente antes de verificar o contador
+    cy.get('body', { timeout: 3000 }).should('be.visible')
     HomePage.shouldHaveCartItems(1)
   })
 
@@ -91,7 +95,10 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
     CartPage.updateQuantity(0, 5)
     
     cy.step('Então a quantidade deve ser atualizada')
-    cy.get('.quantity input').first().should('have.value', '5')
+    // Input de quantidade no carrinho tem nome específico
+    cy.get('input[type="number"][name*="cart"][name*="qty"], .quantity input[type="number"]')
+      .first()
+      .should('have.value', '5')
   })
 
   it('Deve calcular o total do carrinho corretamente', () => {

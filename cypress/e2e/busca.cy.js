@@ -28,11 +28,11 @@ describe('Testes de Busca de Produtos', () => {
     HomePage.shouldBeOnHomePage()
     
     cy.step('Quando busco por um termo válido')
-    HomePage.searchProduct('produto')
+    HomePage.searchProduct('jacket')
     
     cy.step('Então devo ver resultados da busca')
-    cy.url().should('include', 's=produto')
-    cy.get('a[href*="/product/"], .product, .woocommerce-loop-product__link').should('have.length.greaterThan', 0)
+    cy.url().should('include', 's=jacket')
+    cy.get('a[href*="/product/"]', { timeout: 5000 }).should('have.length.greaterThan', 0)
   })
 
   it('Deve exibir mensagem quando não há resultados', () => {
@@ -59,18 +59,18 @@ describe('Testes de Busca de Produtos', () => {
     HomePage.shouldBeOnHomePage()
     
     cy.step('Quando busco por parte do nome de um produto')
-    HomePage.searchProduct('cam')
+    HomePage.searchProduct('ingrid')
     
     cy.step('Então devo ver produtos relacionados')
-    cy.get('a[href*="/product/"], .product, .woocommerce-loop-product__link').should('exist')
+    cy.get('a[href*="/product/"]', { timeout: 5000 }).should('exist')
   })
 
   it('Deve navegar para produto a partir dos resultados da busca', () => {
     cy.step('Dado que realizei uma busca')
-    HomePage.searchProduct('produto')
+    HomePage.searchProduct('jacket')
     
     cy.step('Quando clico em um produto nos resultados')
-    cy.get('a[href*="/product/"]').first().click()
+    cy.get('a[href*="/product/"]', { timeout: 5000 }).first().click()
     
     cy.step('Então devo ser redirecionado para a página do produto')
     ProductPage.shouldBeOnProductPage()

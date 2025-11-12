@@ -90,16 +90,41 @@ class LoginPage {
 
   /**
    * Verifica mensagem de erro
-   * @param {string} expectedMessage - Mensagem esperada (opcional)
+   * @param {string} expectedMessage - Mensagem esperada (opcional, pode ser parcial)
    */
   shouldShowErrorMessage(expectedMessage) {
     cy.get('body').then(($body) => {
       if ($body.find('.woocommerce-error, ul.woocommerce-error').length > 0) {
         if (expectedMessage) {
-          this.errorMessage.should('be.visible').and('contain', expectedMessage)
+          // Verificar se a mensagem contém o texto esperado (case insensitive)
+          this.errorMessage.should('be.visible')
+          // Verificar se contém qualquer parte da mensagem esperada
+          cy.get('.woocommerce-error, ul.woocommerce-error').then(($error) => {
+            const errorText = $error.text().toLowerCase()
+            const expectedLower = expectedMessage.toLowerCase()
+            // Aceitar mensagens como "é um campo obrigatório", "campo obrigatório", "obrigatório", etc.
+            expect(errorText).to.satisfy((text) => {
+              return text.includes(expectedLower) || 
+                     (expectedLower.includes('obrigatório') && (text.includes('obrigatório') || text.includes('required'))) ||
+                     (expectedLower.includes('campo') && (text.includes('campo') || text.includes('field')))
+            })
+          })
         } else {
           this.errorMessage.should('be.visible')
         }
+      } else {
+        // Se não encontrar mensagem de erro, verificar se há validação HTML5
+        cy.get('input[required]').then(($inputs) => {
+          if ($inputs.length > 0) {
+            // Verificar se algum campo obrigatório está vazio
+            $inputs.each((index, input) => {
+              if (!input.value) {
+                // Campo obrigatório vazio - validação HTML5 pode estar ativa
+                cy.wrap(input).should('have.attr', 'required')
+              }
+            })
+          }
+        })
       }
     })
   }

@@ -81,7 +81,7 @@ Cypress.Commands.add('addProductToCart', (productName) => {
   })
   
   // Clicar no botão de comprar
-  cy.get('button:contains("Comprar"), button[name="add-to-cart"], .single_add_to_cart_button')
+  cy.get('button.single_add_to_cart_button, button[name="add-to-cart"], .add_to_cart_button')
     .should('be.visible')
     .click()
   
