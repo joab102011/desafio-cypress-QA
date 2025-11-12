@@ -135,6 +135,19 @@ npm install
 
 ## ▶️ Como Executar os Testes
 
+### Testar Localmente Antes do Push
+
+Para garantir que os testes passem antes de fazer push, execute:
+
+```bash
+npm run test:local
+```
+
+Este comando executa:
+- ✅ Validação de código com ESLint
+- ✅ Verificação de formatação com Prettier
+- ✅ Testes críticos (login e checkout)
+
 ### Modo Interativo (Cypress Test Runner)
 
 Abre a interface gráfica do Cypress para executar os testes de forma interativa:

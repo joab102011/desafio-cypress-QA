@@ -1,0 +1,30 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Executando validações antes do push..."
+echo ""
+
+# Executar lint
+echo "📝 Verificando código com ESLint..."
+npm run lint || {
+  echo "❌ Erros de lint encontrados. Execute 'npm run lint:fix' para corrigir."
+  exit 1
+}
+
+# Verificar formatação
+echo "✨ Verificando formatação com Prettier..."
+npm run format:check || {
+  echo "❌ Erros de formatação encontrados. Execute 'npm run format' para corrigir."
+  exit 1
+}
+
+# Executar testes críticos
+echo "🧪 Executando testes críticos..."
+npm run test:critical || {
+  echo "❌ Testes críticos falharam. Corrija os problemas antes de fazer push."
+  exit 1
+}
+
+echo ""
+echo "✅ Todas as validações passaram! Prosseguindo com o push..."
+

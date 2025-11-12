@@ -42,8 +42,7 @@ jobs:
         with:
           # Não especificar browser = usa o padrão (Electron)
           record: false
-          # Não verificar servidor (site externo)
-          wait-on: false
+          # Site externo - não precisa iniciar servidor local
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
