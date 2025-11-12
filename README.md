@@ -394,8 +394,6 @@ O projeto inclui tratamento para erros comuns:
 
 Todos os testes foram executados com sucesso! Abaixo estão os resultados da execução completa:
 
-![Resultados dos Testes](./docs/test-results.png)
-
 ### Resumo da Execução
 
 | Arquivo de Teste | Tempo | Testes | Passando | Falhando |
