@@ -4,107 +4,25 @@
 [![Cypress](https://img.shields.io/badge/Cypress-13.6.0-brightgreen)](https://www.cypress.io/)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 
-Projeto de automação de testes end-to-end (E2E) utilizando Cypress para o site **lojaebac.ebaconline.art.br** (protocolo HTTP).
+Projeto de automação de testes end-to-end (E2E) utilizando Cypress para o site **lojaebac.ebaconline.art.br**.
 
 ## 📋 Sobre o Projeto
 
-Este projeto foi desenvolvido como parte de um desafio técnico, seguindo as melhores práticas de automação de testes e as recomendações do entrevistador:
+Este projeto foi desenvolvido como parte de um desafio técnico, seguindo as melhores práticas de automação de testes:
 
-- ✅ Uso extensivo de **Commands customizados** para evitar código básico
-- ✅ **Page Objects** bem organizados sem herança desnecessária
-- ✅ **Comentários detalhados** em todo o código
-- ✅ Padrão **BDD (Given/When/Then)** nos testes
+- ✅ Commands customizados para reutilização de código
+- ✅ Page Objects bem organizados
+- ✅ Padrão BDD (Given/When/Then) nos testes
 - ✅ Estrutura fácil de manter e escalar
-- ✅ **CI/CD com GitHub Actions** para qualidade contínua
-- ✅ **Lint e formatação** automatizados
-- ✅ Testes em **múltiplos navegadores** (Chrome, Firefox, Edge)
-
-## 🎯 Cenários Automatizados
-
-### 1. **Login** (Cenário Crítico)
-**Justificativa:** O login é o ponto de entrada para todas as funcionalidades que requerem autenticação. Qualquer falha aqui impede o acesso a funcionalidades essenciais do e-commerce como checkout, histórico de pedidos, etc.
-
-**Cenários cobertos:**
-- Login com credenciais válidas
-- Validação de email inválido
-- Validação de senha inválida
-- Funcionalidade "Lembrar-me"
-- Recuperação de senha
-- Logout
-
-### 2. **Carrinho de Compras** (Cenário Crítico)
-**Justificativa:** O carrinho é fundamental no e-commerce, pois é onde o cliente gerencia os produtos antes de finalizar a compra. Qualquer falha pode resultar em perda de vendas ou problemas no checkout.
-
-**Cenários cobertos:**
-- Adicionar produto ao carrinho
-- Adicionar múltiplas quantidades
-- Remover produto do carrinho
-- Atualizar quantidade
-- Calcular total corretamente
-- Navegar para checkout
-- Limpar carrinho
-
-### 3. **Checkout** (Cenário MAIS Crítico)
-**Justificativa:** O checkout é o momento mais crítico do e-commerce, pois é onde a venda é concretizada. Qualquer falha aqui resulta diretamente em perda de receita.
-
-**Cenários cobertos:**
-- Validação de campos obrigatórios
-- Finalização de compra com dados válidos
-- Validação de formato de email
-- Checkout como usuário logado
-- Exibição de resumo do pedido
-- Alteração de quantidade no checkout
-
-### 4. **Busca de Produtos**
-**Justificativa:** A busca é essencial para que os clientes encontrem produtos rapidamente. Problemas na busca podem resultar em abandono de carrinho.
-
-**Cenários cobertos:**
-- Busca com resultados válidos
-- Busca sem resultados
-- Busca por nome parcial
-- Navegação para produto a partir dos resultados
-
-### 5. **Fluxo Completo E2E**
-**Justificativa:** Valida a jornada completa do cliente desde a busca até a finalização da compra, garantindo que o fluxo principal de vendas funciona end-to-end.
-
-**Cenários cobertos:**
-- Fluxo completo: Busca → Produto → Carrinho → Checkout
-- Fluxo completo com usuário logado
-
-### 6. **Testes Negativos** ⭐ DIFERENCIAL
-**Justificativa:** Testes negativos são essenciais para garantir robustez e segurança. Previnem quebra do sistema com dados inválidos, problemas de segurança e má experiência do usuário.
-
-**Cenários cobertos:**
-- Validações de campos obrigatórios
-- Validações de formato (email, telefone, CEP)
-- Proteção contra SQL Injection
-- Proteção contra XSS (Cross-Site Scripting)
-- Validação de limites (quantidade, tamanho de campos)
-- Tratamento de tentativas múltiplas de login
-- Validações de carrinho vazio
-- Validações de checkout sem dados
-- Tratamento de URLs inválidas
-- Validação de caracteres especiais
-
-### 7. **Testes de Performance** ⭐ DIFERENCIAL
-**Justificativa:** Performance impacta diretamente experiência do usuário, taxa de conversão, SEO e satisfação do cliente. Estes testes garantem que o site mantenha performance adequada.
-
-**Cenários cobertos:**
-- Performance de carregamento de páginas
-- Performance de renderização de elementos
-- Performance de carregamento de imagens
-- Performance de interações do usuário
-- Performance de requisições AJAX
-- Validação de recursos bloqueantes
-- Performance de navegação
-- Performance sob carga
-- Métricas de navegador (DOM, Load Time, Server Response)
+- ✅ CI/CD com GitHub Actions
+- ✅ Lint e formatação automatizados
+- ✅ Testes em múltiplos navegadores (Chrome, Firefox, Edge)
 
 ## 🚀 Instalação
 
 ### Pré-requisitos
 
-- Node.js (versão 14 ou superior)
+- Node.js (versão 18 ou superior)
 - npm ou yarn
 - Git
 
@@ -122,9 +40,9 @@ npm install
 ```
 
 3. **Configure as variáveis de ambiente:**
-   
-   O arquivo `cypress.env.json` já está configurado com valores padrão. Você pode ajustar conforme necessário:
-   
+
+O arquivo `cypress.env.json` já está configurado com valores padrão. Você pode ajustar conforme necessário:
+
 ```json
 {
   "baseUrl": "http://lojaebac.ebaconline.art.br",
@@ -134,19 +52,6 @@ npm install
 ```
 
 ## ▶️ Como Executar os Testes
-
-### Testar Localmente Antes do Push
-
-Para garantir que os testes passem antes de fazer push, execute:
-
-```bash
-npm run test:local
-```
-
-Este comando executa:
-- ✅ Validação de código com ESLint
-- ✅ Verificação de formatação com Prettier
-- ✅ Testes críticos (login e checkout)
 
 ### Modo Interativo (Cypress Test Runner)
 
@@ -186,22 +91,22 @@ npx cypress run --spec "cypress/e2e/login.cy.js"
 # Executar apenas testes de carrinho
 npx cypress run --spec "cypress/e2e/carrinho.cy.js"
 
-# Executar testes críticos (smoke tests)
-npm run test:smoke
-
 # Executar testes críticos (login + checkout)
 npm run test:critical
 ```
 
-### Executar com Modo Headed (com interface gráfica)
+### Testar Localmente Antes do Push
+
+Para garantir que os testes passem antes de fazer push:
 
 ```bash
-# Executar com interface gráfica
-npm run cy:run:headed
-
-# Executar Chrome com interface
-npm run cy:run:chrome:headed
+npm run test:local
 ```
+
+Este comando executa:
+- ✅ Validação de código com ESLint
+- ✅ Verificação de formatação com Prettier
+- ✅ Testes críticos (login e checkout)
 
 ### Lint e Formatação
 
@@ -219,6 +124,94 @@ npm run format:check
 npm run format
 ```
 
+## 🎯 Cenários Automatizados e Justificativas
+
+### 1. **Login** (Cenário Crítico)
+
+**Justificativa:** O login é o ponto de entrada para todas as funcionalidades que requerem autenticação. Qualquer falha aqui impede o acesso a funcionalidades essenciais do e-commerce como checkout, histórico de pedidos, etc.
+
+**Cenários cobertos:**
+- Login com credenciais válidas
+- Validação de email inválido
+- Validação de senha inválida
+- Funcionalidade "Lembrar-me"
+- Recuperação de senha
+- Logout
+
+### 2. **Carrinho de Compras** (Cenário Crítico)
+
+**Justificativa:** O carrinho é fundamental no e-commerce, pois é onde o cliente gerencia os produtos antes de finalizar a compra. Qualquer falha pode resultar em perda de vendas ou problemas no checkout.
+
+**Cenários cobertos:**
+- Adicionar produto ao carrinho
+- Adicionar múltiplas quantidades
+- Remover produto do carrinho
+- Atualizar quantidade
+- Calcular total corretamente
+- Navegar para checkout
+- Limpar carrinho
+
+### 3. **Checkout** (Cenário MAIS Crítico)
+
+**Justificativa:** O checkout é o momento mais crítico do e-commerce, pois é onde a venda é concretizada. Qualquer falha aqui resulta diretamente em perda de receita.
+
+**Cenários cobertos:**
+- Validação de campos obrigatórios
+- Finalização de compra com dados válidos
+- Validação de formato de email
+- Checkout como usuário logado
+- Exibição de resumo do pedido
+- Alteração de quantidade no checkout
+
+### 4. **Busca de Produtos**
+
+**Justificativa:** A busca é essencial para que os clientes encontrem produtos rapidamente. Problemas na busca podem resultar em abandono de carrinho.
+
+**Cenários cobertos:**
+- Busca com resultados válidos
+- Busca sem resultados
+- Busca por nome parcial
+- Navegação para produto a partir dos resultados
+
+### 5. **Fluxo Completo E2E**
+
+**Justificativa:** Valida a jornada completa do cliente desde a busca até a finalização da compra, garantindo que o fluxo principal de vendas funciona end-to-end.
+
+**Cenários cobertos:**
+- Fluxo completo: Busca → Produto → Carrinho → Checkout
+- Fluxo completo com usuário logado
+
+### 6. **Testes Negativos**
+
+**Justificativa:** Testes negativos são essenciais para garantir robustez e segurança. Previnem quebra do sistema com dados inválidos, problemas de segurança e má experiência do usuário.
+
+**Cenários cobertos:**
+- Validações de campos obrigatórios
+- Validações de formato (email, telefone, CEP)
+- Proteção contra SQL Injection
+- Proteção contra XSS (Cross-Site Scripting)
+- Validação de limites (quantidade, tamanho de campos)
+- Tratamento de tentativas múltiplas de login
+- Validações de carrinho vazio
+- Validações de checkout sem dados
+- Tratamento de URLs inválidas
+- Validação de caracteres especiais
+
+### 7. **Testes de Performance**
+
+**Justificativa:** Performance impacta diretamente experiência do usuário, taxa de conversão, SEO e satisfação do cliente. Estes testes garantem que o site mantenha performance adequada.
+
+**Cenários cobertos:**
+- Performance de carregamento de páginas
+- Performance de renderização de elementos
+- Performance de carregamento de imagens
+- Performance de interações do usuário
+- Performance de requisições AJAX
+- Validação de recursos bloqueantes
+- Performance de navegação
+- Performance sob carga
+- Métricas de navegador (DOM, Load Time, Server Response)
+
 ## 📁 Estrutura do Projeto
 
 ```
@@ -230,7 +223,9 @@ desafio-cypress-QA/
 │   │   ├── carrinho.cy.js      # Testes de carrinho
 │   │   ├── checkout.cy.js      # Testes de checkout
 │   │   ├── busca.cy.js         # Testes de busca
-│   │   └── fluxo-completo.cy.js # Testes E2E completos
+│   │   ├── fluxo-completo.cy.js # Testes E2E completos
+│   │   ├── testes-negativos.cy.js # Testes negativos
+│   │   └── performance.cy.js   # Testes de performance
 │   │
 │   ├── support/
 │   │   ├── commands.js         # Commands customizados
@@ -249,7 +244,7 @@ desafio-cypress-QA/
 │
 ├── .github/
 │   └── workflows/              # Workflows do GitHub Actions
-│       └── cypress-tests.yml    # Pipeline de testes (executa em push)
+│       └── cypress-tests.yml    # Pipeline de testes
 ├── cypress.config.js           # Configuração do Cypress
 ├── cypress.env.json            # Variáveis de ambiente
 ├── .eslintrc.json              # Configuração do ESLint
@@ -283,6 +278,7 @@ O projeto utiliza vários commands customizados para facilitar a manutenção e 
 - `cy.navigateTo(page)` - Navega para uma página específica
 - `cy.shouldShowMessage(message, type)` - Verifica mensagens de sucesso/erro
 - `cy.waitForElement(selector, retries)` - Aguarda elemento com retry
+- `cy.step(description)` - Descreve steps BDD (Given/When/Then)
 
 ### Commands de Performance
 
@@ -346,7 +342,7 @@ Os testes executados via GitHub Actions geram automaticamente:
 - ✅ Relatórios consolidados por navegador
 - ✅ Status de execução visível no PR
 
-## 🔄 CI/CD - GitHub Actions ⭐ DIFERENCIAL
+## 🔄 CI/CD - GitHub Actions
 
 O projeto inclui pipeline automatizado de CI/CD configurado para **execução manual sob demanda**.
 
@@ -356,68 +352,51 @@ O projeto inclui pipeline automatizado de CI/CD configurado para **execução ma
 
 ### Estratégia de CI/CD: Execução Manual
 
-**Por que execução manual e não automática a cada push?**
+A decisão de usar execução manual ao invés de automática a cada push foi tomada considerando:
 
-A decisão de usar execução manual ao invés de automática a cada push foi tomada considerando os seguintes fatores:
+1. **Economia de Recursos e Custos** 💰
+   - Evita consumo desnecessário de minutos do GitHub Actions
+   - Reduz custos em projetos com muitos commits/pushes
+   - Permite controle sobre quando utilizar recursos do CI/CD
 
-#### 1. **Economia de Recursos e Custos** 💰
-   - ✅ **Evita consumo desnecessário de minutos do GitHub Actions**
-   - ✅ **Reduz custos em projetos com muitos commits/pushes**
-   - ✅ **Permite controle sobre quando utilizar recursos do CI/CD**
-   - ✅ **Ideal para projetos onde nem todo commit precisa de validação completa**
+2. **Testes Locais como Primeira Linha de Defesa** 🛡️
+   - Testes locais são executados ANTES do push (`npm run test:local`)
+   - Desenvolvedor valida código localmente antes de enviar
+   - Falhas são detectadas e corrigidas localmente
 
-#### 2. **Testes Locais como Primeira Linha de Defesa** 🛡️
-   - ✅ **Testes locais são executados ANTES do push** (`npm run test:local`)
-   - ✅ **Desenvolvedor valida código localmente antes de enviar**
-   - ✅ **Falhas são detectadas e corrigidas localmente**
-   - ✅ **Reduz necessidade de executar testes no CI para cada push**
-
-#### 3. **Execução sob Demanda para Prioridades Específicas** 🎯
-   - ✅ **Workflow disponível para execução manual quando necessário**
-   - ✅ **Ideal para validações específicas e prioridades do sistema**
-   - ✅ **Permite executar testes em momentos estratégicos**
-   - ✅ **Útil para validações antes de releases ou merges importantes**
-
-#### 4. **Flexibilidade e Controle** 🎛️
-   - ✅ **Time decide quando executar testes no CI**
-   - ✅ **Evita execuções desnecessárias durante desenvolvimento ativo**
-   - ✅ **Permite focar testes em momentos críticos**
-   - ✅ **Reduz "ruído" de execuções automáticas constantes**
-
-#### 5. **Melhor Gestão de Workflow** 📊
-   - ✅ **Histórico de execuções mais limpo e focado**
-   - ✅ **Fácil identificar execuções importantes**
-   - ✅ **Reduz notificações desnecessárias**
-   - ✅ **Melhor organização das execuções de CI/CD**
+3. **Execução sob Demanda para Prioridades Específicas** 🎯
+   - Workflow disponível para execução manual quando necessário
+   - Ideal para validações específicas e prioridades do sistema
+   - Permite executar testes em momentos estratégicos
 
 ### Configuração do Workflow
 
 O workflow está configurado com:
 
 1. **Execução Manual Apenas**
-   - ✅ Disparado apenas via `workflow_dispatch` (interface do GitHub)
-   - ✅ Não executa automaticamente em push
-   - ✅ Controle total sobre quando executar
+   - Disparado apenas via `workflow_dispatch` (interface do GitHub)
+   - Não executa automaticamente em push
+   - Controle total sobre quando executar
 
 2. **Testes no Navegador Padrão**
-   - ✅ Utiliza o navegador padrão do Cypress (Electron)
-   - ✅ Execução mais rápida e eficiente
-   - ✅ Suficiente para validação de funcionalidades
+   - Utiliza o navegador padrão do Cypress (Electron)
+   - Execução mais rápida e eficiente
+   - Suficiente para validação de funcionalidades
 
 3. **Validação de Qualidade de Código**
-   - ✅ ESLint executado antes dos testes
-   - ✅ Garante que código segue padrões estabelecidos
-   - ✅ Mantém consistência do código
+   - ESLint executado antes dos testes
+   - Garante que código segue padrões estabelecidos
+   - Mantém consistência do código
 
 4. **Retry Desabilitado**
-   - ✅ Retry desabilitado no `cypress.config.js` (0 retries)
-   - ✅ Site tem performance estável, não há necessidade de retry
-   - ✅ Testes executam uma única vez, mais rápido e direto
+   - Retry desabilitado no `cypress.config.js` (0 retries)
+   - Site tem performance estável, não há necessidade de retry
+   - Testes executam uma única vez, mais rápido e direto
 
 5. **Artifacts para Debug**
-   - ✅ Vídeos dos testes sempre disponíveis
-   - ✅ Screenshots em caso de falha
-   - ✅ Facilita identificação e correção de problemas
+   - Vídeos dos testes sempre disponíveis
+   - Screenshots em caso de falha
+   - Facilita identificação e correção de problemas
 
 ### Como Executar o Workflow Manualmente
 
@@ -451,7 +430,6 @@ Você pode verificar o status dos testes através dos badges no topo do README o
 1. Crie um novo arquivo em `cypress/e2e/` seguindo o padrão `*.cy.js`
 2. Importe os Page Objects necessários
 3. Siga o padrão BDD (Given/When/Then)
-4. Adicione comentários explicativos
 
 ### Adicionar Novos Commands
 
@@ -481,5 +459,3 @@ Desenvolvido como parte do desafio técnico para vaga de QA Automation.
 ## 📄 Licença
 
 Este projeto é privado e foi desenvolvido exclusivamente para fins de avaliação técnica.
-
----

@@ -1,24 +1,7 @@
-/**
- * Testes de Busca de Produtos
- * 
- * Cenário Crítico: Funcionalidade de busca
- * 
- * Justificativa: A busca é essencial para que os clientes encontrem produtos
- * rapidamente. É crítico garantir que:
- * 1. A busca retorne resultados relevantes
- * 2. Buscas sem resultados sejam tratadas adequadamente
- * 3. A busca seja performática
- * 4. Filtros funcionem corretamente (se aplicável)
- * 
- * Problemas na busca podem resultar em abandono de carrinho e perda de vendas.
- */
-
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
 
 describe('Testes de Busca de Produtos', () => {
-  
-  // Hook executado antes de cada teste
   beforeEach(() => {
     HomePage.visit()
   })
@@ -48,7 +31,6 @@ describe('Testes de Busca de Produtos', () => {
       if (bodyText.includes('Nenhum produto encontrado') || bodyText.includes('No products found') || bodyText.includes('nenhum resultado')) {
         cy.contains(/Nenhum produto encontrado|No products found|nenhum resultado/i).should('be.visible')
       } else {
-        // Se não houver mensagem específica, verificar se não há produtos
         cy.get('a[href*="/product/"]').should('have.length', 0)
       }
     })

@@ -1,20 +1,3 @@
-/**
- * Testes de Checkout
- * 
- * Cenário Crítico: Processo de finalização de compra
- * 
- * Justificativa: O checkout é o momento mais crítico do e-commerce, pois é onde
- * a venda é concretizada. Qualquer falha aqui resulta diretamente em perda de receita.
- * É crítico garantir que:
- * 1. Dados de cobrança sejam validados corretamente
- * 2. Métodos de pagamento funcionem
- * 3. O pedido seja processado corretamente
- * 4. Confirmação seja exibida ao cliente
- * 5. Campos obrigatórios sejam validados
- * 
- * Este é o cenário MAIS CRÍTICO, pois qualquer problema aqui impede a conclusão da venda.
- */
-
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
 import CartPage from '../support/page-objects/CartPage'
@@ -22,10 +5,7 @@ import CheckoutPage from '../support/page-objects/CheckoutPage'
 import LoginPage from '../support/page-objects/LoginPage'
 
 describe('Testes de Checkout - Cenário Crítico', () => {
-  
-  // Hook executado antes de cada teste
   beforeEach(() => {
-    // Limpar carrinho e adicionar produto para os testes
     cy.clearCart()
     HomePage.visit()
     

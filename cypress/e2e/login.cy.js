@@ -1,26 +1,7 @@
-/**
- * Testes de Login
- * 
- * Cenário Crítico: Autenticação de usuário
- * 
- * Justificativa: O login é o ponto de entrada para todas as funcionalidades
- * que requerem autenticação. É crítico garantir que:
- * 1. Usuários válidos possam fazer login
- * 2. Usuários inválidos sejam bloqueados
- * 3. A sessão seja mantida corretamente
- * 4. O logout funcione adequadamente
- * 
- * Este é um cenário crítico porque qualquer falha aqui impede o acesso
- * a funcionalidades essenciais do e-commerce como checkout, histórico de pedidos, etc.
- */
-
 import LoginPage from '../support/page-objects/LoginPage'
 
 describe('Testes de Login - Cenário Crítico', () => {
-  
-  // Hook executado antes de cada teste
   beforeEach(() => {
-    // Visitar a página de login antes de cada teste
     LoginPage.visit()
   })
 
@@ -32,7 +13,6 @@ describe('Testes de Login - Cenário Crítico', () => {
     const email = Cypress.env('userEmail')
     const password = Cypress.env('userPassword')
     
-    // Se não houver credenciais configuradas, pular o teste
     if (!email || !password) {
       cy.log('⚠️ Credenciais não configuradas em cypress.env.json - pulando teste')
       return
@@ -44,8 +24,6 @@ describe('Testes de Login - Cenário Crítico', () => {
     cy.get('body', { timeout: 5000 }).then(($body) => {
       const bodyText = $body.text()
       
-      // Verificar se login foi bem-sucedido
-      // Pode estar na página de conta mas com dashboard ou sem formulário de login
       if (bodyText.includes('Dashboard') || bodyText.includes('Sair') || 
           bodyText.includes('Logout') || !bodyText.includes('Username or email address')) {
         cy.log('✅ Login realizado com sucesso')

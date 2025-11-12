@@ -1,18 +1,3 @@
-/**
- * Teste de Fluxo Completo - E2E
- * 
- * Cenário Crítico: Jornada completa do cliente
- * 
- * Justificativa: Este teste valida a jornada completa do cliente desde a busca
- * até a finalização da compra. É crítico porque:
- * 1. Valida a integração entre todas as funcionalidades
- * 2. Simula o comportamento real do usuário
- * 3. Identifica problemas de integração que testes isolados não capturam
- * 4. Garante que o fluxo principal de vendas funciona end-to-end
- * 
- * Este é um dos cenários mais importantes, pois valida o funil de conversão completo.
- */
-
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
 import CartPage from '../support/page-objects/CartPage'
@@ -20,7 +5,6 @@ import CheckoutPage from '../support/page-objects/CheckoutPage'
 import LoginPage from '../support/page-objects/LoginPage'
 
 describe('Fluxo Completo E2E - Jornada do Cliente', () => {
-  
   it('Deve completar todo o fluxo de compra: Busca -> Produto -> Carrinho -> Checkout', () => {
     cy.step('DADO que sou um cliente visitando a loja')
     HomePage.visit()

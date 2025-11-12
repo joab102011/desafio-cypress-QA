@@ -1,30 +1,10 @@
-/**
- * Testes de Carrinho de Compras
- * 
- * Cenário Crítico: Gerenciamento do carrinho de compras
- * 
- * Justificativa: O carrinho é fundamental no e-commerce, pois é onde o cliente
- * gerencia os produtos antes de finalizar a compra. É crítico garantir que:
- * 1. Produtos sejam adicionados corretamente
- * 2. Quantidades possam ser alteradas
- * 3. Produtos possam ser removidos
- * 4. O total seja calculado corretamente
- * 5. O carrinho persista entre sessões (se aplicável)
- * 
- * Qualquer falha aqui pode resultar em perda de vendas ou problemas no checkout.
- */
-
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
 import CartPage from '../support/page-objects/CartPage'
 
 describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
-  
-  // Hook executado antes de cada teste
   beforeEach(() => {
-    // Limpar carrinho antes de cada teste para garantir estado limpo
     cy.clearCart()
-    // Visitar a página inicial
     HomePage.visit()
   })
 
@@ -47,23 +27,18 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
     ProductPage.shouldShowAddToCartSuccess()
     
     cy.step('E o carrinho deve mostrar 1 item')
-    // Verificar se há mensagem de sucesso ou link "Ver carrinho" (mais confiável que contador)
-    // Baseado na gravação: div.woocommerce-notices-wrapper a com texto "Ver carrinho"
     cy.get('body', { timeout: 5000 }).then(($body) => {
-      // Se houver link "Ver carrinho", produto foi adicionado com sucesso
       const hasViewCartLink = $body.find('div.woocommerce-notices-wrapper a, .woocommerce-message a[href*="carrinho"]').length > 0
       const hasSuccessMessage = $body.find('.woocommerce-message').length > 0
       
       if (hasViewCartLink || hasSuccessMessage) {
-        // Produto foi adicionado com sucesso - verificar mensagem ou link
         if (hasViewCartLink) {
           cy.get('div.woocommerce-notices-wrapper a, .woocommerce-message a[href*="carrinho"]').should('be.visible')
         } else {
           cy.get('.woocommerce-message').should('be.visible').should('contain.text', 'adicionado')
         }
       } else {
-        // Fallback: verificar contador no header após aguardar
-        cy.wait(2000) // Aguardar atualização do contador
+        cy.wait(2000)
         HomePage.visit()
         cy.get('body', { timeout: 3000 }).should('be.visible')
         HomePage.shouldHaveCartItems(1)
@@ -90,7 +65,7 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
     cy.step('E ao visualizar o carrinho, deve ter 3 unidades')
     ProductPage.viewCart()
     CartPage.shouldBeOnCartPage()
-    CartPage.shouldHaveItems(1) // 1 item, mas com quantidade 3
+    CartPage.shouldHaveItems(1)
   })
 
   it('Deve remover produto do carrinho', () => {
@@ -127,15 +102,11 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
     CartPage.updateQuantity(0, 5)
     
     cy.step('Então a quantidade deve ser atualizada')
-    // Aguardar um pouco para o valor ser atualizado após clicar nos botões
     cy.wait(2000)
-    // Input de quantidade no carrinho tem nome específico
-    // Verificar se o valor foi atualizado (pode ser 5 ou mais, dependendo de quantos cliques foram feitos)
     cy.get('input[type="number"][name*="cart"], input.qty, .quantity input[type="number"]', { timeout: 5000 })
       .first()
       .should(($input) => {
         const value = parseInt($input.val()) || 1
-        // Aceitar valores de 3 a 5+ (pode ter clicado mais vezes ou menos)
         expect(value).to.be.at.least(3)
       })
   })
