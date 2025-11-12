@@ -1,3 +1,10 @@
+/**
+ * Page Object para a página de checkout
+ * 
+ * Boa prática: Centraliza seletores e ações do checkout
+ * Gerencia preenchimento de dados de cobrança e finalização de pedido
+ * Exporta instância única (singleton) para reutilização
+ */
 class CheckoutPage {
   get billingFirstName() {
     return cy.get('#billing_first_name')

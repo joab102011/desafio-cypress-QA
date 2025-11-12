@@ -1,3 +1,10 @@
+/**
+ * Page Object para a página do carrinho de compras
+ * 
+ * Boa prática: Centraliza seletores e ações do carrinho
+ * Gerencia itens, quantidades, remoção e navegação para checkout
+ * Exporta instância única (singleton) para reutilização
+ */
 class CartPage {
   get cartItems() {
     return cy.get('.cart_item, .woocommerce-cart-form__cart-item, tbody .cart_item')

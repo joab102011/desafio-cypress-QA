@@ -1,8 +1,18 @@
+/**
+ * Testes de Carrinho de Compras - Cenário Crítico
+ * 
+ * Boa prática: Carrinho é fundamental no e-commerce para gerenciar produtos antes do checkout
+ * Estes testes validam adição, remoção, atualização de quantidade e cálculos
+ * 
+ * Estrutura BDD: Usa padrão Given/When/Then com cy.step() para clareza
+ */
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
 import CartPage from '../support/page-objects/CartPage'
 
 describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
+  // Antes de cada teste: limpa carrinho e navega para home
+  // Boa prática: Garante estado inicial limpo para todos os testes
   beforeEach(() => {
     cy.clearCart()
     HomePage.visit()

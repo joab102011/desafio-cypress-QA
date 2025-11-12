@@ -1,3 +1,12 @@
+/**
+ * Testes Negativos - Validações e Edge Cases
+ * 
+ * Boa prática: Testes negativos são essenciais para garantir robustez e segurança
+ * Previnem quebra do sistema com dados inválidos, problemas de segurança e má UX
+ * 
+ * Estrutura BDD: Usa padrão Given/When/Then com cy.step() para clareza
+ * Cobre: validações de login, carrinho, checkout, busca e navegação
+ */
 import LoginPage from '../support/page-objects/LoginPage'
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
@@ -5,7 +14,8 @@ import CartPage from '../support/page-objects/CartPage'
 import CheckoutPage from '../support/page-objects/CheckoutPage'
 
 describe('Testes Negativos - Validações e Edge Cases', () => {
-  
+  // Antes de cada teste: limpa carrinho
+  // Boa prática: Garante estado inicial limpo
   beforeEach(() => {
     cy.clearCart()
   })

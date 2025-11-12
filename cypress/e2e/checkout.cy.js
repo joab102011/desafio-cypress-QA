@@ -1,3 +1,12 @@
+/**
+ * Testes de Checkout - Cenário Crítico
+ * 
+ * Boa prática: Checkout é o momento mais crítico do e-commerce
+ * Estes testes validam o fluxo completo de finalização de compra
+ * 
+ * Estrutura BDD: Usa padrão Given/When/Then com cy.step() para clareza
+ * Setup: Antes de cada teste, adiciona produto ao carrinho e navega para checkout
+ */
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
 import CartPage from '../support/page-objects/CartPage'
@@ -5,6 +14,8 @@ import CheckoutPage from '../support/page-objects/CheckoutPage'
 import LoginPage from '../support/page-objects/LoginPage'
 
 describe('Testes de Checkout - Cenário Crítico', () => {
+  // Antes de cada teste: prepara ambiente com produto no carrinho
+  // Boa prática: Garante estado inicial consistente (carrinho limpo + produto adicionado)
   beforeEach(() => {
     cy.clearCart()
     cy.wait(1000)

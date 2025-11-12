@@ -1,7 +1,17 @@
+/**
+ * Testes de Busca de Produtos
+ * 
+ * Boa prática: Busca é essencial para que clientes encontrem produtos rapidamente
+ * Estes testes validam funcionalidade de busca com diferentes cenários
+ * 
+ * Estrutura BDD: Usa padrão Given/When/Then com cy.step() para clareza
+ */
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
 
 describe('Testes de Busca de Produtos', () => {
+  // Antes de cada teste: navega para página inicial
+  // Boa prática: Garante estado inicial consistente
   beforeEach(() => {
     HomePage.visit()
   })

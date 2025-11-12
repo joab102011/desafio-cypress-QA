@@ -1,3 +1,11 @@
+/**
+ * Testes de Fluxo Completo E2E - Jornada do Cliente
+ * 
+ * Boa prática: Valida jornada completa do cliente desde busca até finalização
+ * Estes testes garantem que o fluxo principal de vendas funciona end-to-end
+ * 
+ * Estrutura BDD: Usa padrão Given/When/Then com cy.step() para clareza
+ */
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
 import CartPage from '../support/page-objects/CartPage'

@@ -1,3 +1,11 @@
+/**
+ * Testes de Performance do Frontend
+ * 
+ * Boa prática: Performance impacta diretamente experiência do usuário e taxa de conversão
+ * Estes testes garantem que o site mantenha performance adequada
+ * 
+ * Estrutura: Usa commands customizados de performance para medições precisas
+ */
 import HomePage from '../support/page-objects/HomePage'
 import ProductPage from '../support/page-objects/ProductPage'
 import CartPage from '../support/page-objects/CartPage'

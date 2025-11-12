@@ -1,3 +1,10 @@
+/**
+ * Page Object para a página de detalhes do produto
+ * 
+ * Boa prática: Centraliza seletores e ações da página de produto
+ * Gerencia variações de produtos (tamanho, cor) e adição ao carrinho
+ * Exporta instância única (singleton) para reutilização
+ */
 class ProductPage {
   get productTitle() {
     return cy.get('h1.product_title, h1')
