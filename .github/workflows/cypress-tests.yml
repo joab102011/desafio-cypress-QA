@@ -44,9 +44,6 @@ jobs:
           parallel: true
           ci-build-id: ${{ github.run_id }}-${{ github.run_attempt }}
           group: 'Chrome Tests'
-          start: npm start
-          wait-on: 'http://localhost:3000'
-          wait-on-timeout: 120
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
