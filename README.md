@@ -64,6 +64,35 @@ Este projeto foi desenvolvido como parte de um desafio técnico, seguindo as mel
 - Fluxo completo: Busca → Produto → Carrinho → Checkout
 - Fluxo completo com usuário logado
 
+### 6. **Testes Negativos** ⭐ DIFERENCIAL
+**Justificativa:** Testes negativos são essenciais para garantir robustez e segurança. Previnem quebra do sistema com dados inválidos, problemas de segurança e má experiência do usuário.
+
+**Cenários cobertos:**
+- Validações de campos obrigatórios
+- Validações de formato (email, telefone, CEP)
+- Proteção contra SQL Injection
+- Proteção contra XSS (Cross-Site Scripting)
+- Validação de limites (quantidade, tamanho de campos)
+- Tratamento de tentativas múltiplas de login
+- Validações de carrinho vazio
+- Validações de checkout sem dados
+- Tratamento de URLs inválidas
+- Validação de caracteres especiais
+
+### 7. **Testes de Performance** ⭐ DIFERENCIAL
+**Justificativa:** Performance impacta diretamente experiência do usuário, taxa de conversão, SEO e satisfação do cliente. Estes testes garantem que o site mantenha performance adequada.
+
+**Cenários cobertos:**
+- Performance de carregamento de páginas
+- Performance de renderização de elementos
+- Performance de carregamento de imagens
+- Performance de interações do usuário
+- Performance de requisições AJAX
+- Validação de recursos bloqueantes
+- Performance de navegação
+- Performance sob carga
+- Métricas de navegador (DOM, Load Time, Server Response)
+
 ## 🚀 Instalação
 
 ### Pré-requisitos
@@ -192,6 +221,17 @@ O projeto utiliza vários commands customizados para facilitar a manutenção e 
 - `cy.navigateTo(page)` - Navega para uma página específica
 - `cy.shouldShowMessage(message, type)` - Verifica mensagens de sucesso/erro
 - `cy.waitForElement(selector, retries)` - Aguarda elemento com retry
+
+### Commands de Performance
+
+- `cy.measurePageLoad(url, maxTime)` - Mede tempo de carregamento de página
+- `cy.measureAction(action, maxTime)` - Mede tempo de resposta de uma ação
+- `cy.measureElementRender(selector, maxTime)` - Mede tempo de renderização
+- `cy.validatePerformanceMetrics(thresholds)` - Valida métricas de performance
+- `cy.measureImageLoad(selector, maxTime)` - Mede tempo de carregamento de imagens
+- `cy.measureAjaxResponse(method, url, maxTime)` - Mede tempo de resposta AJAX
+- `cy.validateResourceLoadTime(maxTime)` - Valida recursos bloqueantes
+- `cy.measureInteraction(clickSelector, responseSelector, maxTime)` - Mede tempo de interação
 
 ## 🎨 Page Objects
 
