@@ -10,7 +10,7 @@ import './commands-performance'
 
 // Configurações globais de Cypress
 // Desabilitar logs desnecessários no console
-Cypress.on('uncaught:exception', (err, runnable) => {
+Cypress.on('uncaught:exception', (err) => {
   // Retornar false aqui previne que o Cypress falhe o teste
   // Útil para ignorar erros de JavaScript de terceiros que não afetam os testes
   if (err.message.includes('ResizeObserver loop limit exceeded')) {
@@ -29,7 +29,7 @@ Cypress.on('log:added', (options) => {
 })
 
 // Hook para capturar screenshots em caso de falha
-Cypress.on('fail', (error, runnable) => {
+Cypress.on('fail', (error) => {
   // Adicionar lógica adicional se necessário antes de falhar
   throw error
 })

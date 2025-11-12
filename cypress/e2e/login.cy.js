@@ -15,7 +15,6 @@
  */
 
 import LoginPage from '../support/page-objects/LoginPage'
-import HomePage from '../support/page-objects/HomePage'
 
 describe('Testes de Login - Cenário Crítico', () => {
   
@@ -26,89 +25,85 @@ describe('Testes de Login - Cenário Crítico', () => {
   })
 
   it('Deve realizar login com credenciais válidas', () => {
-    // Dado que estou na página de login
+    cy.step('Dado que estou na página de login')
     LoginPage.shouldBeOnLoginPage()
     
-    // Quando preencho o formulário com credenciais válidas
+    cy.step('Quando preencho o formulário com credenciais válidas')
     const email = Cypress.env('userEmail')
     const password = Cypress.env('userPassword')
-    
     LoginPage.login(email, password)
     
-    // Então devo ser redirecionado e estar logado
+    cy.step('Então devo ser redirecionado e estar logado')
     cy.url().should('not.include', '/minha-conta')
     cy.shouldBeLoggedIn()
   })
 
   it('Não deve realizar login com email inválido', () => {
-    // Dado que estou na página de login
+    cy.step('Dado que estou na página de login')
     LoginPage.shouldBeOnLoginPage()
     
-    // Quando preencho o formulário com email inválido
+    cy.step('Quando preencho o formulário com email inválido')
     LoginPage.fillLoginForm('email-invalido@teste.com', 'senha123')
     LoginPage.submitLogin()
     
-    // Então devo ver uma mensagem de erro
+    cy.step('Então devo ver uma mensagem de erro')
     LoginPage.shouldShowErrorMessage('Endereço de e-mail desconhecido')
   })
 
   it('Não deve realizar login com senha inválida', () => {
-    // Dado que estou na página de login
+    cy.step('Dado que estou na página de login')
     LoginPage.shouldBeOnLoginPage()
     
-    // Quando preencho o formulário com senha incorreta
+    cy.step('Quando preencho o formulário com senha incorreta')
     const email = Cypress.env('userEmail')
     LoginPage.fillLoginForm(email, 'senha-incorreta')
     LoginPage.submitLogin()
     
-    // Então devo ver uma mensagem de erro
+    cy.step('Então devo ver uma mensagem de erro')
     LoginPage.shouldShowErrorMessage('A senha fornecida para o e-mail')
   })
 
   it('Deve manter o usuário logado ao marcar "Lembrar-me"', () => {
-    // Dado que estou na página de login
+    cy.step('Dado que estou na página de login')
     LoginPage.shouldBeOnLoginPage()
     
-    // Quando faço login marcando "Lembrar-me"
+    cy.step('Quando faço login marcando "Lembrar-me"')
     const email = Cypress.env('userEmail')
     const password = Cypress.env('userPassword')
-    
     LoginPage.fillLoginForm(email, password, true)
     LoginPage.submitLogin()
     
-    // Então devo estar logado
+    cy.step('Então devo estar logado')
     cy.shouldBeLoggedIn()
     
-    // E ao fechar e reabrir o navegador, devo continuar logado
-    // (Nota: Este teste pode variar dependendo da implementação do site)
+    cy.step('E ao recarregar a página, devo continuar logado')
     cy.reload()
     cy.shouldBeLoggedIn()
   })
 
   it('Deve permitir acesso à página de recuperação de senha', () => {
-    // Dado que estou na página de login
+    cy.step('Dado que estou na página de login')
     LoginPage.shouldBeOnLoginPage()
     
-    // Quando clico no link "Esqueceu a senha?"
+    cy.step('Quando clico no link "Esqueceu a senha?"')
     LoginPage.clickLostPassword()
     
-    // Então devo ser redirecionado para a página de recuperação
+    cy.step('Então devo ser redirecionado para a página de recuperação')
     cy.url().should('include', '/lost-password')
     cy.contains('Recuperar senha').should('be.visible')
   })
 
   it('Deve realizar logout corretamente', () => {
-    // Dado que estou logado
+    cy.step('Dado que estou logado')
     const email = Cypress.env('userEmail')
     const password = Cypress.env('userPassword')
     LoginPage.login(email, password)
     cy.shouldBeLoggedIn()
     
-    // Quando clico em logout
+    cy.step('Quando clico em logout')
     cy.logout()
     
-    // Então devo ser redirecionado para a página de login
+    cy.step('Então devo ser redirecionado para a página de login')
     LoginPage.shouldBeOnLoginPage()
   })
 })
-

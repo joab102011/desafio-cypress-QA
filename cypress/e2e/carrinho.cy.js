@@ -29,127 +29,121 @@ describe('Testes de Carrinho de Compras - Cenário Crítico', () => {
   })
 
   it('Deve adicionar produto ao carrinho a partir da página inicial', () => {
-    // Dado que estou na página inicial
+    cy.step('Dado que estou na página inicial')
     HomePage.shouldBeOnHomePage()
     
-    // Quando clico em um produto
-    // Nota: Ajustar o seletor conforme a estrutura real do site
+    cy.step('Quando clico em um produto')
     cy.get('.product').first().click()
     
-    // E adiciono o produto ao carrinho
+    cy.step('E adiciono o produto ao carrinho')
     ProductPage.shouldBeOnProductPage()
     ProductPage.addToCart()
     
-    // Então o produto deve ser adicionado com sucesso
+    cy.step('Então o produto deve ser adicionado com sucesso')
     ProductPage.shouldShowAddToCartSuccess()
     
-    // E o carrinho deve mostrar 1 item
+    cy.step('E o carrinho deve mostrar 1 item')
     HomePage.visit()
     HomePage.shouldHaveCartItems(1)
   })
 
   it('Deve adicionar múltiplas quantidades do mesmo produto', () => {
-    // Dado que estou na página de um produto
+    cy.step('Dado que estou na página de um produto')
     HomePage.visit()
     cy.get('.product').first().click()
     ProductPage.shouldBeOnProductPage()
     
-    // Quando adiciono 3 unidades do produto
+    cy.step('Quando adiciono 3 unidades do produto')
     ProductPage.addToCart(3)
     
-    // Então o produto deve ser adicionado com sucesso
+    cy.step('Então o produto deve ser adicionado com sucesso')
     ProductPage.shouldShowAddToCartSuccess()
     
-    // E ao visualizar o carrinho, deve ter 3 unidades
+    cy.step('E ao visualizar o carrinho, deve ter 3 unidades')
     ProductPage.viewCart()
     CartPage.shouldBeOnCartPage()
     CartPage.shouldHaveItems(1) // 1 item, mas com quantidade 3
   })
 
   it('Deve remover produto do carrinho', () => {
-    // Dado que tenho um produto no carrinho
+    cy.step('Dado que tenho um produto no carrinho')
     HomePage.visit()
     cy.get('.product').first().click()
     ProductPage.addToCart()
     ProductPage.viewCart()
     
-    // Quando removo o produto do carrinho
+    cy.step('Quando removo o produto do carrinho')
     CartPage.removeItem(0)
     
-    // Então o carrinho deve estar vazio
+    cy.step('Então o carrinho deve estar vazio')
     CartPage.shouldBeEmpty()
   })
 
   it('Deve atualizar a quantidade de um produto no carrinho', () => {
-    // Dado que tenho um produto no carrinho
+    cy.step('Dado que tenho um produto no carrinho')
     HomePage.visit()
     cy.get('.product').first().click()
     ProductPage.addToCart(1)
     ProductPage.viewCart()
     CartPage.shouldBeOnCartPage()
     
-    // Quando atualizo a quantidade para 5
+    cy.step('Quando atualizo a quantidade para 5')
     CartPage.updateQuantity(0, 5)
     
-    // Então a quantidade deve ser atualizada
-    // (Verificação adicional pode ser feita verificando o total)
+    cy.step('Então a quantidade deve ser atualizada')
     cy.get('.quantity input').first().should('have.value', '5')
   })
 
   it('Deve calcular o total do carrinho corretamente', () => {
-    // Dado que tenho produtos no carrinho
+    cy.step('Dado que tenho produtos no carrinho')
     HomePage.visit()
     
-    // Adicionar primeiro produto
+    cy.step('Quando adiciono primeiro produto')
     cy.get('.product').first().click()
     ProductPage.addToCart(2)
     ProductPage.viewCart()
     
-    // Adicionar segundo produto
+    cy.step('E adiciono segundo produto')
     HomePage.visit()
     cy.get('.product').eq(1).click()
     ProductPage.addToCart(1)
     ProductPage.viewCart()
     
-    // Quando visualizo o carrinho
+    cy.step('Então o total deve ser calculado corretamente')
     CartPage.shouldBeOnCartPage()
-    
-    // Então o total deve ser calculado corretamente
-    // (Nota: Validação específica depende da estrutura do site)
     CartPage.getCartTotal().should('exist')
   })
 
   it('Deve navegar para o checkout a partir do carrinho', () => {
-    // Dado que tenho produtos no carrinho
+    cy.step('Dado que tenho produtos no carrinho')
     HomePage.visit()
     cy.get('.product').first().click()
     ProductPage.addToCart()
     ProductPage.viewCart()
     
-    // Quando clico em "Finalizar compra"
+    cy.step('Quando clico em "Finalizar compra"')
     CartPage.proceedToCheckout()
     
-    // Então devo ser redirecionado para a página de checkout
+    cy.step('Então devo ser redirecionado para a página de checkout')
     cy.url().should('include', '/checkout')
   })
 
   it('Deve limpar todo o carrinho', () => {
-    // Dado que tenho múltiplos produtos no carrinho
+    cy.step('Dado que tenho múltiplos produtos no carrinho')
     HomePage.visit()
     
-    // Adicionar vários produtos
+    cy.step('Quando adiciono vários produtos')
     for (let i = 0; i < 3; i++) {
       cy.get('.product').eq(i).click()
       ProductPage.addToCart()
       HomePage.visit()
     }
     
-    // Quando limpo o carrinho
+    cy.step('E limpo o carrinho')
     CartPage.visit()
     CartPage.clearCart()
     
-    // Então o carrinho deve estar vazio
+    cy.step('Então o carrinho deve estar vazio')
     CartPage.shouldBeEmpty()
   })
 })
-

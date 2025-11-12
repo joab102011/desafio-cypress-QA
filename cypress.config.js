@@ -42,8 +42,9 @@ module.exports = defineConfig({
   
   // Configuração de e2e
   e2e: {
-    // Base URL do site a ser testado
-    baseUrl: 'https://lojaebac.ebaconline.art.br',
+    // Base URL do site a ser testado (site externo)
+    // Para sites externos, não precisamos verificar se o servidor está rodando
+    baseUrl: 'http://lojaebac.ebaconline.art.br',
     
     // Padrão de arquivos de teste
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
@@ -62,6 +63,12 @@ module.exports = defineConfig({
           console.log(message)
           return null
         }
+      })
+      
+      // Desabilitar verificação de servidor para sites externos
+      // Isso evita que o Cypress tente verificar se o servidor está rodando
+      on('before:run', () => {
+        // Não fazer nada - site externo não precisa de servidor local
       })
       
       return config

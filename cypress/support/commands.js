@@ -85,31 +85,38 @@ Cypress.Commands.add('addProductToCart', (productName) => {
 Cypress.Commands.add('fillCheckoutForm', (checkoutData) => {
   // Preencher dados de cobrança
   if (checkoutData.firstName) {
-    cy.get('#billing_first_name').clear().type(checkoutData.firstName)
+    cy.get('#billing_first_name').clear()
+    cy.get('#billing_first_name').type(checkoutData.firstName)
   }
   
   if (checkoutData.lastName) {
-    cy.get('#billing_last_name').clear().type(checkoutData.lastName)
+    cy.get('#billing_last_name').clear()
+    cy.get('#billing_last_name').type(checkoutData.lastName)
   }
   
   if (checkoutData.email) {
-    cy.get('#billing_email').clear().type(checkoutData.email)
+    cy.get('#billing_email').clear()
+    cy.get('#billing_email').type(checkoutData.email)
   }
   
   if (checkoutData.phone) {
-    cy.get('#billing_phone').clear().type(checkoutData.phone)
+    cy.get('#billing_phone').clear()
+    cy.get('#billing_phone').type(checkoutData.phone)
   }
   
   if (checkoutData.address) {
-    cy.get('#billing_address_1').clear().type(checkoutData.address)
+    cy.get('#billing_address_1').clear()
+    cy.get('#billing_address_1').type(checkoutData.address)
   }
   
   if (checkoutData.city) {
-    cy.get('#billing_city').clear().type(checkoutData.city)
+    cy.get('#billing_city').clear()
+    cy.get('#billing_city').type(checkoutData.city)
   }
   
   if (checkoutData.postcode) {
-    cy.get('#billing_postcode').clear().type(checkoutData.postcode)
+    cy.get('#billing_postcode').clear()
+    cy.get('#billing_postcode').type(checkoutData.postcode)
   }
   
   if (checkoutData.country) {
@@ -133,8 +140,8 @@ Cypress.Commands.add('waitForElement', (selector, retries = 3) => {
         cy.get(selector).should('be.visible')
         return
       }
-      // Aguardar um pouco antes de tentar novamente
-      cy.wait(1000)
+      // Aguardar elemento aparecer (usando should ao invés de wait arbitrário)
+      cy.get(selector, { timeout: 2000 }).should('exist')
     })
   }
 })
@@ -153,7 +160,8 @@ Cypress.Commands.add('clearCart', () => {
     if ($body.find('.remove').length > 0) {
       cy.get('.remove').each(($el) => {
         cy.wrap($el).click()
-        cy.wait(1000) // Aguardar remoção
+        // Aguardar remoção usando should ao invés de wait arbitrário
+        cy.contains('Seu carrinho está vazio', { timeout: 5000 }).should('exist')
       })
     }
   })

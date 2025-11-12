@@ -4,7 +4,7 @@
 [![Cypress](https://img.shields.io/badge/Cypress-13.6.0-brightgreen)](https://www.cypress.io/)
 [![Node](https://img.shields.io/badge/Node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
 
-Projeto de automação de testes end-to-end (E2E) utilizando Cypress para o site **lojaebac.ebaconline.art.br**.
+Projeto de automação de testes end-to-end (E2E) utilizando Cypress para o site **lojaebac.ebaconline.art.br** (protocolo HTTP).
 
 ## 📋 Sobre o Projeto
 
@@ -127,7 +127,7 @@ npm install
    
 ```json
 {
-  "baseUrl": "https://lojaebac.ebaconline.art.br",
+  "baseUrl": "http://lojaebac.ebaconline.art.br",
   "userEmail": "seu-email@teste.com",
   "userPassword": "sua-senha"
 }

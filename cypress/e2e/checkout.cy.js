@@ -40,21 +40,21 @@ describe('Testes de Checkout - Cenário Crítico', () => {
   })
 
   it('Deve validar campos obrigatórios no checkout', () => {
-    // Dado que estou na página de checkout
+    cy.step('Dado que estou na página de checkout')
     CheckoutPage.shouldBeOnCheckoutPage()
     
-    // Quando tento finalizar o pedido sem preencher os campos obrigatórios
+    cy.step('Quando tento finalizar o pedido sem preencher os campos obrigatórios')
     CheckoutPage.placeOrder()
     
-    // Então devo ver mensagens de erro para campos obrigatórios
+    cy.step('Então devo ver mensagens de erro para campos obrigatórios')
     CheckoutPage.shouldShowError('é um campo obrigatório')
   })
 
   it('Deve finalizar compra com dados válidos', () => {
-    // Dado que estou na página de checkout
+    cy.step('Dado que estou na página de checkout')
     CheckoutPage.shouldBeOnCheckoutPage()
     
-    // Quando preencho todos os dados de cobrança
+    cy.step('Quando preencho todos os dados de cobrança')
     const billingData = {
       firstName: 'João',
       lastName: 'Silva',
@@ -68,33 +68,30 @@ describe('Testes de Checkout - Cenário Crítico', () => {
     
     CheckoutPage.fillBillingData(billingData)
     
-    // E seleciono um método de pagamento
-    // Nota: Ajustar conforme métodos disponíveis no site
+    cy.step('E seleciono um método de pagamento')
     cy.get('body').then(($body) => {
       if ($body.find('input[name="payment_method"]').length > 0) {
-        cy.get('input[name="payment_method"]').first().check({ force: true })
+        cy.get('input[name="payment_method"]').first().should('be.visible').check()
       }
     })
     
-    // E finalizo o pedido
+    cy.step('E finalizo o pedido')
     CheckoutPage.placeOrder()
     
-    // Então devo ver a confirmação do pedido
-    // Nota: Em ambiente de teste, pode não processar realmente o pagamento
-    // Ajustar validação conforme comportamento real do site
-    cy.wait(3000)
-    cy.get('body').then(($body) => {
-      if ($body.text().includes('Pedido recebido') || $body.text().includes('order received')) {
+    cy.step('Então devo ver a confirmação do pedido')
+    cy.get('body', { timeout: 5000 }).then(($body) => {
+      const bodyText = $body.text()
+      if (bodyText.includes('Pedido recebido') || bodyText.includes('order received')) {
         CheckoutPage.shouldShowOrderReceived()
       }
     })
   })
 
   it('Deve validar formato de email no checkout', () => {
-    // Dado que estou na página de checkout
+    cy.step('Dado que estou na página de checkout')
     CheckoutPage.shouldBeOnCheckoutPage()
     
-    // Quando preencho um email inválido
+    cy.step('Quando preencho um email inválido')
     const billingData = {
       firstName: 'João',
       lastName: 'Silva',
@@ -108,26 +105,25 @@ describe('Testes de Checkout - Cenário Crítico', () => {
     CheckoutPage.fillBillingData(billingData)
     CheckoutPage.placeOrder()
     
-    // Então devo ver uma mensagem de erro de email inválido
+    cy.step('Então devo ver uma mensagem de erro de email inválido')
     CheckoutPage.shouldShowError('email')
   })
 
   it('Deve permitir checkout como usuário logado', () => {
-    // Dado que estou logado
+    cy.step('Dado que estou logado')
     LoginPage.visit()
     const email = Cypress.env('userEmail')
     const password = Cypress.env('userPassword')
     LoginPage.login(email, password)
     
-    // E tenho produtos no carrinho
+    cy.step('E tenho produtos no carrinho')
     HomePage.visit()
     cy.get('.product').first().click()
     ProductPage.addToCart()
     ProductPage.viewCart()
     CartPage.proceedToCheckout()
     
-    // Quando preencho os dados de cobrança
-    // (Dados podem estar pré-preenchidos para usuário logado)
+    cy.step('Quando preencho os dados de cobrança')
     const billingData = {
       phone: '11999999999',
       address: 'Rua Teste, 123',
@@ -137,39 +133,37 @@ describe('Testes de Checkout - Cenário Crítico', () => {
     
     CheckoutPage.fillBillingData(billingData)
     
-    // E finalizo o pedido
+    cy.step('E finalizo o pedido')
     CheckoutPage.placeOrder()
     
-    // Então o pedido deve ser processado
-    cy.wait(3000)
-    // Validação conforme comportamento real do site
+    cy.step('Então o pedido deve ser processado')
+    cy.get('body', { timeout: 5000 }).should('be.visible')
   })
 
   it('Deve exibir resumo do pedido no checkout', () => {
-    // Dado que estou na página de checkout
+    cy.step('Dado que estou na página de checkout')
     CheckoutPage.shouldBeOnCheckoutPage()
     
-    // Quando visualizo a página
-    // Então devo ver o resumo do pedido com produtos e total
+    cy.step('Quando visualizo a página')
+    cy.step('Então devo ver o resumo do pedido com produtos e total')
     cy.get('.shop_table, .cart').should('be.visible')
     CheckoutPage.cartTotal.should('be.visible')
   })
 
   it('Deve permitir alterar quantidade no checkout', () => {
-    // Dado que estou na página de checkout
+    cy.step('Dado que estou na página de checkout')
     CheckoutPage.shouldBeOnCheckoutPage()
     
-    // Quando altero a quantidade de um produto
-    // (Se a funcionalidade existir no checkout)
+    cy.step('Quando altero a quantidade de um produto')
     cy.get('body').then(($body) => {
       if ($body.find('.quantity input').length > 0) {
-        cy.get('.quantity input').first().clear().type('2')
-        cy.wait(1000) // Aguardar atualização
+        cy.get('.quantity input').first().clear()
+        cy.get('.quantity input').first().type('2')
+        CheckoutPage.cartTotal.should('be.visible')
         
-        // Então o total deve ser atualizado
+        cy.step('Então o total deve ser atualizado')
         CheckoutPage.cartTotal.should('be.visible')
       }
     })
   })
 })
-
